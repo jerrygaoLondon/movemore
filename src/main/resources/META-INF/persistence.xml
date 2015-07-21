@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="1.0">
+
+	<!-- Use Hibernate hbm2ddl tool to create, update, and validate a database schema using Hibernate mappings configuration
+		Setup: To invoke Hibernates hbm2ddl during the creation of the entity manager factory
+			set the 'hibernate.hbm2ddl.auto' property to one of "create", "create-drop", "update" and "validate"  -->
+    <persistence-unit name="ApplicationEntityManager" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <class>org.appfuse.model.User</class>
+        <class>org.appfuse.model.Role</class>
+        
+        <class>uk.ac.oak.movemore.webapp.model.Device</class>
+        <class>uk.ac.oak.movemore.webapp.model.Sensors</class>
+        <class>uk.ac.oak.movemore.webapp.model.Observations</class>         
+        <class>uk.ac.oak.movemore.webapp.model.DeviceMessages</class>
+    </persistence-unit>
+
+    <!-- WARNING: This file's file original source is at web/common/src/main/resources/META-INF. The
+        META-INF directory is included in the jsf, spring, struts and tapestry projects using svn:externals.
+        If you need to modify this file, please do so in web/common/src/main/resources/META-INF, check it
+        in, and then "svn up" for the other modules. -->
+</persistence>

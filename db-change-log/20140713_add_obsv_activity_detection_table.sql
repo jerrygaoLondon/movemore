@@ -1,0 +1,3 @@
+-- create new table for obsv_activity_detection
+create table obsv_activity_detection (activityType varchar(255), confidence double precision, created datetime not null, latitude float, longitude float, obsv_time datetime, updated datetime, version integer, activitySensor_obsv_id bigint not null, primary key (activitySensor_obsv_id), unique (activitySensor_obsv_id)) ENGINE=InnoDB;
+alter table obsv_activity_detection add index FK2D03B4BE50B717DE (activitySensor_obsv_id), add constraint FK2D03B4BE50B717DE foreign key (activitySensor_obsv_id) references observations (obsv_id);

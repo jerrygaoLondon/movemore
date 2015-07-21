@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <table name="app_user">
+        <column>id</column>
+        <column>username</column>
+        <column>password</column>
+        <column>first_name</column>
+        <column>last_name</column>
+        <column>address</column>
+        <column>city</column>
+        <column>country</column>
+        <column>email</column>
+        <column>phone_number</column>
+        <column>postal_code</column>
+        <column>province</column>
+        <column>website</column>
+        <column>password_hint</column>
+        <column>version</column>
+        <column>account_enabled</column>
+        <column>account_expired</column>
+        <column>account_locked</column>
+        <column>credentials_expired</column>
+        <row>
+            <value description="id">-1</value>
+            <value description="username">user</value>
+            <value description="password">$2a$10$CnQVJ9bsWBjMpeSKrrdDEeuIptZxXrwtI6CZ/OgtNxhIgpKxXeT9y</value>
+            <value description="first_name">Tomcat</value>
+            <value description="last_name">User</value>
+            <value description="address"></value>
+            <value description="city">Denver</value>
+            <value description="country">US</value>
+            <value description="email">matt_raible@yahoo.com</value>
+            <value description="phone_number"></value>
+            <value description="postal_code">80210</value>
+            <value description="province">CO</value>
+            <value description="website">http://tomcat.apache.org</value>
+            <value description="password_hint"><![CDATA[A male kitty.]]></value>
+            <value description="version">1</value>
+            <value description="account_enabled">1</value>
+            <value description="account_expired">0</value>
+            <value description="account_locked">0</value>
+            <value description="credentials_expired">0</value>
+        </row>
+        <row>
+            <value description="id">-2</value>
+            <value description="username">admin</value>
+            <value description="password">$2a$10$bH/ssqW8OhkTlIso9/yakubYODUOmh.6m5HEJvcBq3t3VdBh7ebqO</value>
+            <value description="first_name">Matt</value>
+            <value description="last_name">Raible</value>
+            <value description="address"></value>
+            <value description="city">Denver</value>
+            <value description="country">US</value>
+            <value description="email">matt@raibledesigns.com</value>
+            <value description="phone_number"></value>
+            <value description="postal_code">80210</value>
+            <value description="province">CO</value>
+            <value description="website">http://raibledesigns.com</value>
+            <value description="password_hint"><![CDATA[Not a female kitty.]]></value>
+            <value description="version">1</value>
+            <value description="account_enabled">1</value>
+            <value description="account_expired">0</value>
+            <value description="account_locked">0</value>
+            <value description="credentials_expired">0</value>
+        </row>
+        <row>
+            <value description="id">-3</value>
+            <value description="username">two_roles_user</value>
+            <value description="password">$2a$10$bH/ssqW8OhkTlIso9/yakubYODUOmh.6m5HEJvcBq3t3VdBh7ebqO</value>
+            <value description="first_name">Two Roles</value>
+            <value description="last_name">User</value>
+            <value description="address"></value>
+            <value description="city">Denver</value>
+            <value description="country">US</value>
+            <value description="email">two_roles_user@appfuse.org</value>
+            <value description="phone_number"></value>
+            <value description="postal_code">80210</value>
+            <value description="province">CO</value>
+            <value description="website">http://raibledesigns.com</value>
+            <value description="password_hint"><![CDATA[Not a female kitty.]]></value>
+            <value description="version">1</value>
+            <value description="account_enabled">1</value>
+            <value description="account_expired">0</value>
+            <value description="account_locked">0</value>
+            <value description="credentials_expired">0</value>
+        </row>        
+    </table>
+    <table name="role">
+        <column>id</column>
+        <column>name</column>
+        <column>description</column>
+        <row>
+            <value description="id">-1</value>
+            <value description="name">ROLE_ADMIN</value>
+            <value description="description"><![CDATA[Administrator role (can edit Users)]]></value>
+        </row>
+        <row>
+            <value description="id">-2</value>
+            <value description="name">ROLE_USER</value>
+            <value description="description"><![CDATA[Default role for all Users]]></value>
+        </row>
+    </table>
+    <table name="user_role">
+        <column>user_id</column>
+        <column>role_id</column>
+        <row>
+            <value description="user_id">-1</value>
+            <value description="role_id">-2</value>
+        </row>
+        <row>
+            <value description="user_id">-2</value>
+            <value description="role_id">-1</value>
+        </row>
+        <row>
+            <value description="user_id">-3</value>
+            <value description="role_id">-1</value>
+        </row>
+        <row>
+            <value description="user_id">-3</value>
+            <value description="role_id">-2</value>
+        </row>
+    </table>
+    
+        <!-- sample data for sensor web project -->
+    <table name="device">
+    	<column>device_id</column>
+    	<column>name</column>
+    	<column>lastKnownIP</column>
+    	<column>numericLastKnownIP</column>
+    	<column>latitude</column>
+    	<column>longitude</column>
+      	<column>device_physical_id</column>
+      	<column>description</column>
+      	<column>created</column>
+    	<column>updated</column>
+    	<column>version</column>
+    	<row>
+            <value description="device_id">1000001</value>
+            <value description="name">Dummy Raspberry Pi Device 1</value>
+            <value description="lastKnownIP">143.167.10.249</value>
+            <value description="numericLastKnownIP">2410089209</value>
+            <value description="latitude">53.38297</value>
+            <value description="longitude">-1.4659</value>
+            <value description="device_physical_id">00CC02EE038C</value>
+            <value description="description">dummy device 1 for test</value>
+            <value description="created">2014-06-05 12:00:01</value>
+            <value description="updated">2014-06-05 12:00:01</value>
+            <value description="version">0</value>
+        </row>    	
+    </table>
+    
+    <table name="device_messages">
+    	<column>message_id</column>
+    	<column>device_id</column>    	
+    	<column>message</column>
+    	<column>isActive</column>
+    	<column>created</column>
+    	<column>updated</column>
+    	<column>version</column>
+    	<row>
+    		<value description="message_id">2000001</value>
+            <value description="device_id">1000001</value>
+            <value description="message">Order: change monitoring frequency to every hour.</value>
+            <value description="isActive">0</value>
+            <value description="created">2014-06-05 12:00:01</value>
+            <value description="updated">2014-06-05 12:00:01</value>
+            <value description="version">0</value>
+        </row>    	
+    </table>
+    
+    <table name="sensors">
+    	<column>sensor_id</column>
+    	<column>device_id</column>  
+    	<column>sensor_physical_id</column>
+    	<column>sensor_type</column>
+    	<column>name</column>
+    	<column>description</column>
+    	<column>created</column>
+    	<column>updated</column>
+    	<column>version</column>
+    	<row>
+    		<value description="sensor_id">3000001</value>
+            <value description="device id">1000001</value>
+            <value description="sensor_physical_id">b827eb2eb26e</value>
+            <value description="sensor_type">0</value>
+            <value description="name">Dummy water velocity sensor</value>
+            <value description="description">The dummy water velocity sensor is used to monitor water velocity.</value>
+            <value description="created">2014-06-05 12:00:01</value>
+            <value description="updated">2014-06-05 12:00:01</value>
+            <value description="version">0</value>
+        </row>    	
+    </table>
+    
+        
+    <table name="observations">
+    	<column>obsv_id</column>
+    	<column>sensor_id</column>
+    	<column>value</column>
+    	<column>latitude</column>
+    	<column>longitude</column>
+    	<column>obsv_time</column>    	
+    	<column>record_time</column>
+    	<column>created</column>
+    	<column>updated</column>
+    	<column>version</column>
+    	<row>
+    		<value description="obsv_id">4000001</value>
+            <value description="sensor id">3000001</value>
+            <value description="value">50m</value>
+            <value description="latitude">+53.38297</value>
+            <value description="longitude">-1.4659</value>
+            <value description="obsv_time">2014-06-05 10:00:01</value>
+            <value description="record_time">2014-06-05 11:58:01</value>
+            <value description="created">2014-06-05 12:00:01</value>
+            <value description="updated">2014-06-05 12:00:01</value>
+            <value description="version">0</value>
+        </row>
+        <row>
+    		<value description="obsv_id">4000002</value>
+            <value description="sensor id">3000001</value>
+            <value description="value"></value>
+            <value description="latitude">0.0</value>
+            <value description="longitude">0.0</value>
+            <value description="obsv_time">2014-06-05 11:00:01</value>
+            <value description="record_time">2014-06-05 11:00:01</value>
+            <value description="created">2014-06-05 11:00:01</value>
+            <value description="updated">2014-06-05 11:00:01</value>
+            <value description="version">0</value>
+        </row>      	
+        <row>
+    		<value description="obsv_id">4000003</value>
+            <value description="sensor id">3000001</value>
+            <value description="value"></value>
+            <value description="latitude">0.0</value>
+            <value description="longitude">0.0</value>
+            <value description="obsv_time">2014-06-05 10:00:01</value>
+            <value description="record_time">2014-06-05 10:00:01</value>
+            <value description="created">2014-06-05 10:00:01</value>
+            <value description="updated">2014-06-05 10:00:01</value>
+            <value description="version">0</value>
+        </row>
+        <row>
+    		<value description="obsv_id">4000004</value>
+            <value description="sensor id">3000001</value>
+            <value description="value"></value>
+            <value description="latitude">0.0</value>
+            <value description="longitude">0.0</value>
+            <value description="obsv_time">2014-06-05 15:00:01</value>
+            <value description="record_time">2014-06-05 15:00:01</value>
+            <value description="created">2014-06-05 15:00:01</value>
+            <value description="updated">2014-06-05 15:00:01</value>
+            <value description="version">0</value>
+        </row>   
+        <row>
+    		<value description="obsv_id">4000005</value>
+            <value description="sensor id">3000001</value>
+            <value description="value"></value>
+            <value description="latitude">0.0</value>
+            <value description="longitude">0.0</value>
+            <value description="obsv_time">2014-06-05 16:00:01</value>
+            <value description="record_time">2014-06-05 16:00:01</value>
+            <value description="created">2014-06-05 16:00:01</value>
+            <value description="updated">2014-06-05 16:00:01</value>
+            <value description="version">0</value>
+        </row>   
+        <row>
+    		<value description="obsv_id">4000006</value>
+            <value description="sensor id">3000001</value>
+            <value description="value"></value>
+            <value description="latitude">0.0</value>
+            <value description="longitude">0.0</value>
+            <value description="obsv_time">2014-07-10 17:00:01</value>
+            <value description="record_time">2014-07-10 17:00:01</value>
+            <value description="created">2014-07-10 17:00:01</value>
+            <value description="updated">2014-07-10 17:00:01</value>
+            <value description="version">0</value>
+        </row>      
+        <row>
+    		<value description="obsv_id">4000007</value>
+            <value description="sensor id">3000001</value>
+            <value description="value"></value>
+            <value description="latitude">0.0</value>
+            <value description="longitude">0.0</value>
+            <value description="obsv_time">2014-07-13 13:00:01</value>
+            <value description="record_time">2014-07-13 13:00:01</value>
+            <value description="created">2014-07-13 13:00:01</value>
+            <value description="updated">2014-07-13 13:00:01</value>
+            <value description="version">0</value>
+        </row>      
+    </table>
+      
+    <table name="obsv_device_detection">
+    	<column>devDetect_obsv_id</column>
+    	<column>hex_macAddress</column>
+    	<column>macAddress</column>
+    	<column>signalStrength</column>
+    	<column>latitude</column>
+    	<column>longitude</column>
+    	<column>obsv_time</column>    	
+    	<column>created</column>
+    	<column>updated</column>
+    	<column>version</column>
+    	<row>
+    		<value description="obsv_id">4000002</value>
+            <value description="hex_macAddress">160181811236</value>
+            <value description="macAddress">00:25:4B:94:78:24</value>
+            <value description="signalStrength">-50</value>
+            <value description="latitude">+53.38297</value>
+            <value description="longitude">-1.4659</value>
+            <value description="obsv_time">2014-06-05 10:00:01</value>
+            <value description="created">2014-06-05 12:00:01</value>
+            <value description="updated">2014-06-05 12:00:01</value>
+            <value description="version">0</value>
+        </row>    	
+    </table>
+     
+    <table name="obsv_people_counter">
+    	<column>pCount_obsv_id</column>
+    	<column>number</column>
+    	<column>latitude</column>
+    	<column>longitude</column>
+    	<column>obsv_time</column>    	
+    	<column>created</column>
+    	<column>updated</column>
+    	<column>version</column>
+    	<row>
+    		<value description="People Count obsv id">4000003</value>
+            <value description="number">50</value>
+            <value description="latitude">+53.38297</value>
+            <value description="longitude">-1.4659</value>
+            <value description="obsv_time">2014-06-05 10:00:01</value>
+            <value description="created">2014-06-05 12:00:01</value>
+            <value description="updated">2014-06-05 12:00:01</value>
+            <value description="version">0</value>
+        </row>    	
+    </table>
+    
+     <table name="obsv_carregplate_detection">
+    	<column>carRegPlate_obsv_id</column>
+    	<column>hex_carRegPlate_num</column>
+    	<column>carRegPlate_num</column>
+    	<column>latitude</column>
+    	<column>longitude</column>
+    	<column>obsv_time</column>    	
+    	<column>created</column>
+    	<column>updated</column>
+    	<column>version</column>
+    	<row>
+    		<value description="Car Registration Plate obsv id">4000004</value>
+            <value description="hex_carRegPlate_num">261985477333559663327827012857272600096</value>
+            <value description="carRegPlate_num">c518914cdda33ad6218c9b1dd6860620</value>
+            <value description="latitude">+53.36297</value>
+            <value description="longitude">-1.4859</value>
+            <value description="obsv_time">2014-06-20 10:00:01</value>
+            <value description="created">2014-06-20 12:00:01</value>
+            <value description="updated">2014-06-20 12:00:01</value>
+            <value description="version">0</value>
+        </row>    	
+    </table>     
+     <!-- 
+   <table name="obsv_obd_sensor">
+    	<column>obdSensor_obsv_id</column>
+    	<column>fuelEconomy</column>
+    	<column>vehicleSpeed</column>
+    	<column>ambientAirTemperature</column>
+    	<column>fuelLevel</column>
+    	<column>engineRPM</column>
+    	<column>latitude</column>
+    	<column>longitude</column>
+    	<column>obsv_time</column>    	
+    	<column>created</column>
+    	<column>updated</column>
+    	<column>version</column>
+    	<row>
+    		<value description="OBD car sensor obsv id">4000005</value>
+            <value description="Fuel Economy">-1.0</value>
+            <value description="Vehicle Speed">25</value>
+            <value description="Ambient Air Temperature">23</value>
+            <value description="Fuel Level">0.0</value>
+            <value description="Engine RPM">1026</value>
+            <value description="latitude">+53.36297</value>
+            <value description="longitude">-1.4859</value>
+            <value description="obsv_time">2014-07-10 10:00:01</value>
+            <value description="created">2014-07-10 12:00:01</value>
+            <value description="updated">2014-06-20 12:00:01</value>
+            <value description="version">0</value>
+        </row>    	
+    </table>
+     -->
+   
+    <table name="obsv_voice_sensor">
+    	<column>voiceSensor_obsv_id</column>
+    	<column>decibel</column>
+    	<column>latitude</column>
+    	<column>longitude</column>
+    	<column>obsv_time</column>    	
+    	<column>created</column>
+    	<column>updated</column>
+    	<column>version</column>
+    	<row>
+    		<value description="Voice sensor obsv id">4000006</value>
+            <value description="decibel">53.0</value>
+            <value description="latitude">+53.36297</value>
+            <value description="longitude">-1.4859</value>
+            <value description="obsv_time">2014-07-10 10:00:01</value>
+            <value description="created">2014-07-10 12:00:01</value>
+            <value description="updated">2014-06-20 12:00:01</value>
+            <value description="version">0</value>
+        </row>    	
+    </table>
+    
+        
+    <table name="obsv_activity_detection">
+    	<column>activitySensor_obsv_id</column>
+    	<column>activityType</column>
+    	<column>confidence</column>
+    	<column>latitude</column>
+    	<column>longitude</column>
+    	<column>obsv_time</column>    	
+    	<column>created</column>
+    	<column>updated</column>
+    	<column>version</column>
+    	<row>
+    		<value description="activitySensor_obsv_id">4000007</value>
+            <value description="activityType">Vehicle</value>
+            <value description="confidence">80</value>
+            <value description="latitude">+53.36297</value>
+            <value description="longitude">-1.4859</value>
+            <value description="obsv_time">2014-07-21 22:00:01</value>
+            <value description="created">2014-07-21 22:00:01</value>
+            <value description="updated">2014-07-21 22:00:01</value>
+            <value description="version">0</value>
+        </row>    	
+    </table>
+     
+    <table name="sensor_type">
+    	<column>id</column>
+    	<column>name</column>
+    	
+    	<row>
+    		<value description="sensor type">0</value>
+            <value description="name">Unclassified</value>
+        </row>
+        <row>
+    		<value description="sensor type">1</value>
+            <value description="name">Bluetooth Device Sensor - Bluetooth Scanner</value>
+        </row>
+        <row>
+    		<value description="sensor type">2</value>
+            <value description="name">WIFI Device Sensor - Wifi counter</value>
+        </row>
+        <row>
+    		<value description="sensor type">3</value>
+            <value description="name">People Counter - Number of Faces</value>
+        </row>
+        <row>
+    		<value description="sensor type">4</value>
+            <value description="name">Car Registration Plates Detector</value>
+        </row>
+        <row>
+    		<value description="sensor type">5</value>
+            <value description="name">OBD car speed detector</value>
+        </row>
+        <row>
+    		<value description="sensor type">6</value>
+            <value description="name">Voice Sensor</value>
+        </row>
+        <row>
+    		<value description="sensor type">7</value>
+            <value description="name">Activity Sensor</value>
+        </row>
+    </table>
+</dataset>

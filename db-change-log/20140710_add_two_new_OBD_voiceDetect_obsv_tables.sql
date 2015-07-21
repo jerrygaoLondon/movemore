@@ -1,0 +1,5 @@
+-- create three new tables for OBD car and voice d sensors observations
+create table obsv_obd_sensor (ambientAirTemperature double precision, created datetime not null, engineRPM double precision, fuelEconomy double precision, fuelLevel double precision, latitude float, longitude float, obsv_time datetime, updated datetime, vehicleSpeed double precision, version integer, obdSensor_obsv_id bigint not null, primary key (obdSensor_obsv_id), unique (obdSensor_obsv_id)) ENGINE=InnoDB;
+alter table obsv_obd_sensor add index FKC171F313628DE40 (obdSensor_obsv_id), add constraint FKC171F313628DE40 foreign key (obdSensor_obsv_id) references observations (obsv_id);
+create table obsv_voice_sensor (created datetime not null, decibel double precision, latitude float, longitude float, obsv_time datetime, updated datetime, version integer, voiceSensor_obsv_id bigint not null, primary key (voiceSensor_obsv_id), unique (voiceSensor_obsv_id)) ENGINE=InnoDB;
+alter table obsv_voice_sensor add index FK5AD2599095650CC1 (voiceSensor_obsv_id), add constraint FK5AD2599095650CC1 foreign key (voiceSensor_obsv_id) references observations (obsv_id);

@@ -1,0 +1,25 @@
+<!-- NOTE: If you're working offline, you might have to change the DOCTYPE to the following:
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">-->
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <mapping class="org.appfuse.model.User"/>
+        <mapping class="org.appfuse.model.Role"/>
+        
+        <mapping class="uk.ac.oak.movemore.webapp.model.Device"/>
+        <mapping class="uk.ac.oak.movemore.webapp.model.Sensors"/>
+        <mapping class="uk.ac.oak.movemore.webapp.model.Observations"/>
+        <mapping class="uk.ac.oak.movemore.webapp.model.DeviceMessages"/>
+        <mapping class="uk.ac.oak.movemore.webapp.model.ObsvDeviceDetection"/>
+        <mapping class="uk.ac.oak.movemore.webapp.model.ObsvPeopleCount"/>
+        <mapping class="uk.ac.oak.movemore.webapp.model.ObsvCarRegPlateDetection"/>        
+        <mapping class="uk.ac.oak.movemore.webapp.model.SensorType"/>      
+        <mapping class="uk.ac.oak.movemore.webapp.model.ObsvOBDDetection"/> 
+        <mapping class="uk.ac.oak.movemore.webapp.model.ObsvVoiceDecibelDetection"/>    
+        <mapping class="uk.ac.oak.movemore.webapp.model.ObsvActivityDetection"/>       
+        <mapping class="uk.ac.oak.movemore.webapp.model.ObsvActivityNorm"/>           
+    </session-factory>
+</hibernate-configuration>
