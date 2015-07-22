@@ -122,9 +122,7 @@ public class TestSensorObservationRESTServiceEx {
 		sensorData.put("data", observations);
 		sensorData.put("sensorId", "356194054489613-ActivitySensor");
 		
-		
 		System.out.println(sensorData.toString());
-		//System.out.println(sensorData.toString().replaceAll("\\\\", ""));
 		
 		HttpPost postRequest = new HttpPost(restURL.toString());
 		
