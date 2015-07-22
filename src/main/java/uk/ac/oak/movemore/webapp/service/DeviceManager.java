@@ -1,18 +1,19 @@
 package uk.ac.oak.movemore.webapp.service;
 
+import javax.ws.rs.core.Response;
+
 import org.appfuse.service.GenericManager;
 
 import uk.ac.oak.movemore.webapp.dao.DeviceNotFoundException;
 import uk.ac.oak.movemore.webapp.model.Device;
-import uk.ac.oak.movemore.webapp.service.response.JSONResponse;
 
 public interface DeviceManager extends GenericManager<Device, Long> {
 
-	JSONResponse updateDeviceLocation(String deviceId, Float latitude,
-			Float longitude);
+	Response updateDeviceLocation(String deviceId, Double latitude,
+			Double longitude);
 
-	JSONResponse registerNewDevice(String devicePhysicalId, Float latitude,
-			Float longtitude, String deviceName);
+	Response registerNewDevice(String devicePhysicalId, Double latitude,
+			Double longtitude, String deviceName);
 	
 	Device addOrUpdateDevice(String devicePhysicalId, String deviceName, Double latitude, Double longtitude, Float batteryLevel);
 	
@@ -28,7 +29,7 @@ public interface DeviceManager extends GenericManager<Device, Long> {
 	 * @param longitude
 	 * @return
 	 */
-	public JSONResponse registerOrUpdateDeviceInfo(String devicePhysicalId, String deviceName,
+	public Response registerOrUpdateDeviceInfo(String devicePhysicalId, String deviceName,
 			String sensorPhysicalId, String sensorName, Double latitude,
 			Double longitude, Float batteryLevel, String sensorDescription, String sensorType);
 }

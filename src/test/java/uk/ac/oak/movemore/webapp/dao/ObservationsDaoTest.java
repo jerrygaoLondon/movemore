@@ -41,8 +41,8 @@ public class ObservationsDaoTest extends BaseDaoTestCase {
 		 Assert.assertEquals(new Integer(0), testObsv1.getVersion()); 
 		 Assert.assertNotNull(testObsv1.getLatitude());
 		 Assert.assertNotNull(testObsv1.getLongitude());
-		 Assert.assertEquals(0, Float.valueOf("-1.4659").compareTo(testObsv1.getLongitude())); 
-		 Assert.assertEquals(0, Float.valueOf("53.383").compareTo(testObsv1.getLatitude())); 
+		 Assert.assertEquals(0, Double.valueOf("-1.4659").compareTo(testObsv1.getLongitude())); 
+		 Assert.assertEquals(0, Double.valueOf("53.38297").compareTo(testObsv1.getLatitude())); 
 		 Assert.assertNotNull(testObsv1.getCreated()); 
 		 Assert.assertNotNull(testObsv1.getUpdated()); 
 		 Assert.assertNotNull(testObsv1.getRecordTime()); 

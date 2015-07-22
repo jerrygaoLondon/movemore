@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-
 import uk.ac.oak.movemore.webapp.model.ObsvActivityDetection;
 
 public class ObsvActivityDetectionVO implements Serializable {
@@ -15,15 +13,17 @@ public class ObsvActivityDetectionVO implements Serializable {
 
 	private Long obsvId;
 	private Long sensorId;
-	private String activityType;
+	private Integer activityType;
 	private Double confidence;
 	// observation location
-	private Float longitude;
-	private Float latitude;
+	private Double longitude;
+	private Double latitude;
 	private Double speed;
 	private Double locAccuracy;
 	// The observation time sent from sensor
 	private Date obsvTime;
+	
+	private Integer stepsDoneToday;
 	// private Date created;
 	private Date updated;
 	private Boolean normalised = false;
@@ -45,11 +45,11 @@ public class ObsvActivityDetectionVO implements Serializable {
 		this.sensorId = sensorId;
 	}
 
-	public String getActivityType() {
+	public Integer getActivityType() {
 		return activityType;
 	}
 
-	public void setActivityType(String activityType) {
+	public void setActivityType(Integer activityType) {
 		this.activityType = activityType;
 	}
 
@@ -61,19 +61,19 @@ public class ObsvActivityDetectionVO implements Serializable {
 		this.confidence = confidence;
 	}
 
-	public Float getLongitude() {
+	public Double getLongitude() {
 		return longitude;
 	}
 
-	public void setLongitude(Float longitude) {
+	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
 	}
 
-	public Float getLatitude() {
+	public Double getLatitude() {
 		return latitude;
 	}
 
-	public void setLatitude(Float latitude) {
+	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
 	}
 
@@ -124,13 +124,21 @@ public class ObsvActivityDetectionVO implements Serializable {
 	public void setNormalised(Boolean normalised) {
 		this.normalised = normalised;
 	}
+	
+	public Integer getStepsDoneToday() {
+		return stepsDoneToday;
+	}
+
+	public void setStepsDoneToday(Integer stepsDoneToday) {
+		this.stepsDoneToday = stepsDoneToday;
+	}
 
 	public void clone(ObsvActivityDetection obsvActivityDetect) {
 		setObsvId(obsvActivityDetect.getObsvId());
 
 		if (obsvActivityDetect.getObsvActivityNorm() != null
-				&& StringUtils.isNotEmpty(obsvActivityDetect
-						.getObsvActivityNorm().getFinalActivityType())) {
+				&& obsvActivityDetect
+						.getObsvActivityNorm().getFinalActivityType() != null) {
 			setActivityType(obsvActivityDetect.getObsvActivityNorm()
 					.getFinalActivityType());
 			setNormalised(true);
@@ -157,7 +165,7 @@ public class ObsvActivityDetectionVO implements Serializable {
 				&& obsvActivityDetect.getObsvActivityNorm().getFinalLatitude()
 						.floatValue() != 0.0f) {
 			setLatitude(obsvActivityDetect.getObsvActivityNorm()
-					.getFinalLatitude().floatValue());
+					.getFinalLatitude());
 			setNormalised(true);
 		} else {
 			setLatitude(obsvActivityDetect.getLatitude());
@@ -168,7 +176,7 @@ public class ObsvActivityDetectionVO implements Serializable {
 				&& obsvActivityDetect.getObsvActivityNorm().getFinalLongitude()
 						.floatValue() != 0.0f) {
 			setLongitude(obsvActivityDetect.getObsvActivityNorm()
-					.getFinalLongitude().floatValue());
+					.getFinalLongitude());
 			setNormalised(true);
 		} else {
 			setLongitude(obsvActivityDetect.getLongitude());
@@ -179,6 +187,7 @@ public class ObsvActivityDetectionVO implements Serializable {
 				.getSensorId());
 		// setObsvTime(DateUtil.convertUTCDateToLocalTime(obsvActivityDetect.getObsvTime()));
 		setObsvTime(obsvActivityDetect.getObsvTime());
+		setStepsDoneToday(obsvActivityDetect.getStepsDoneToday());
 		setUpdated(obsvActivityDetect.getUpdated());
 		setVersion(obsvActivityDetect.getVersion());
 	}

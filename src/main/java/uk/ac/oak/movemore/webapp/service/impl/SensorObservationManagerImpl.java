@@ -9,7 +9,6 @@ import java.io.OutputStream;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,6 +46,8 @@ import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.base.Strings;
+
 import uk.ac.oak.movemore.webapp.dao.ObservationsDao;
 import uk.ac.oak.movemore.webapp.dao.ObsvActivityDetectionDao;
 import uk.ac.oak.movemore.webapp.dao.ObsvCarRegPlateDetectionDao;
@@ -73,6 +74,7 @@ import uk.ac.oak.movemore.webapp.service.response.ServiceResponseFailure;
 import uk.ac.oak.movemore.webapp.util.DateUtil;
 import uk.ac.oak.movemore.webapp.util.ISO8601DateParser;
 import uk.ac.oak.movemore.webapp.util.SensorTypeEnum;
+import uk.ac.oak.movemore.webapp.util.StandardDateFormatter;
 
 @Service("sensorObservationManager")
 @Transactional
@@ -157,7 +159,7 @@ public class SensorObservationManagerImpl extends
 			return obsvResp;
 		}
 
-		if (!isTimeStampValid(obsvTime)) {
+		if (!DateUtil.isTimeStampValid(obsvTime)) {
 			obsvResp = new ServiceResponseFailure();
 			obsvResp.setIsSuccess(-1);
 			((ServiceResponseFailure) obsvResp)
@@ -195,17 +197,6 @@ public class SensorObservationManagerImpl extends
 
 		return obsvResp;
 
-	}
-
-	public static boolean isTimeStampValid(String inputString) {
-		SimpleDateFormat format = new java.text.SimpleDateFormat(
-				"yyyy-MM-dd HH:mm:ss.SSSSSS");
-		try {
-			format.parse(inputString);
-			return true;
-		} catch (ParseException e) {
-			return false;
-		}
 	}
 
 	@Override
@@ -417,7 +408,7 @@ public class SensorObservationManagerImpl extends
 			time = DateUtil.getCurrentUTCTime();
 		}
 
-		if (!isTimeStampValid(time)) {
+		if (!DateUtil.isTimeStampValid(time)) {
 			return badRequest("Please provide valid observation timestamp in the format \"yyyy-MM-dd HH:mm:ss.SSSSSS\".");
 		}
 
@@ -448,12 +439,12 @@ public class SensorObservationManagerImpl extends
 		return failureResp.build();
 	}
 
-	private void saveObservations(String sensorPhysicalId, Timestamp time,
+	private void saveObservations(String sensorPhysicalId, Date time,
 			List<String> values) throws SensorNotFoundException,JSONException, Exception {
 		Sensors sensor = sensorsDao.findSensorByPhysicalId(sensorPhysicalId);
 
-		Float devLatitude = sensor.getDevice().getLatitude();
-		Float devLongitude = sensor.getDevice().getLongitude();
+		Double devLatitude = sensor.getDevice().getLatitude();
+		Double devLongitude = sensor.getDevice().getLongitude();
 
 		Observations obsv;
 		for (String value : values) {
@@ -468,7 +459,7 @@ public class SensorObservationManagerImpl extends
 
 	@Override
 	public Response saveObservation(String json) {
-		log.info("Message received!");
+		log.info("Processing GZIPStream....");
 		log.info(json);
 		boolean failure = false;
 		String failureMessage = "";
@@ -491,27 +482,24 @@ public class SensorObservationManagerImpl extends
 				JSONObject oneObsv = (JSONObject) data.get(i);
 				// "time" is for activity sensor and "timestamp" is for OBD
 				// sensor
-				if (oneObsv.isNull("time") && oneObsv.isNull("timestamp")) {
+				//oneObsv.getJSONObject("activityDescription");
+				JSONObject activityObj = oneObsv.getJSONObject("activityDescription");
+				
+				String obsvTimeStr = activityObj.getString("time");				
+				
+				if (Strings.isNullOrEmpty(obsvTimeStr)) {
 					return badRequest(String.format(
 							"'time' is not found in observation value [%s]",
 							oneObsv.toString()));
 				}
-
-				Long obsvTime = null;
-				if (!oneObsv.isNull("time")) {
-					obsvTime = oneObsv.getLong("time");
-				} else if (!oneObsv.isNull("timestamp")) {
-					obsvTime = oneObsv.getLong("timestamp");
+				
+				if (!DateUtil.isValidStandardTimeStamp(obsvTimeStr)) {
+					return badRequest("Please provide valid observation timestamp in the format \"yyyy-MM-dd'T'HH:mm:ssZ\".");
 				}
-
-				if (obsvTime == null) {
-					return badRequest(String
-							.format("'time' is not found in 'data' observation value [%s]",
-									oneObsv.toString()));
-				}
+				Date obsvTime = StandardDateFormatter.parse(obsvTimeStr);
 
 				List<String> values = Arrays.asList(oneObsv.toString());
-				saveObservations(sensorPhysicalId, new Timestamp(obsvTime),
+				saveObservations(sensorPhysicalId, obsvTime,
 						values);
 			}
 
@@ -563,7 +551,7 @@ public class SensorObservationManagerImpl extends
 			return badRequest("Please provide valid observation values as 'values' is Empty.");
 		}
 
-		if (!isTimeStampValid(time)) {
+		if (!DateUtil.isTimeStampValid(time)) {
 			log.warn("Please provide valid observation timestamp in the format \"yyyy-MM-dd HH:mm:ss.SSSSSS\".");
 			return badRequest(String
 					.format("'time' {%s} provided is invalid. Please provide valid observation timestamp in the format \"yyyy-MM-dd HH:mm:ss.SSSSSS\".",

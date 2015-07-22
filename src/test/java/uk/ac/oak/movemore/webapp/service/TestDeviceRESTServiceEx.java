@@ -7,6 +7,8 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.core.Response.Status;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -49,56 +51,48 @@ public class TestDeviceRESTServiceEx {
 
 	
 	public static void main(String[] args) {
-		//testRegisterOrUpdateDeviceInfo();
-		testRegisterNewDevice();
+		testRegisterOrUpdateDeviceInfo();
+		//testRegisterNewDevice();
 		//testUpdateDeviceLocation();
 	}
 	
 	private static void testRegisterOrUpdateDeviceInfo() {
-
-		String newDevicePhysicalId="b827eb2ed26d";
-	//	double latitude = 1;
-	//	double longitude = 1;
-		String newDeviceName="Face-Detector";		
-		String newSensorPhysicalId="numfaces";
-		String newSensorName="Number of faces";		
+		String newDevicePhysicalId="356194054489613-iphone";
+		Double latitude = 53.211223333d;
+		Double longitude = -1.32233010001d;
+		String newDeviceName="IPhone iOS8.0 device";		
+		String newSensorPhysicalId="356194054489613-ActivitySensor";
+		String newSensorName="356194054489613 Activity Sensor";		
 		
 		HttpClient client = HttpClientBuilder.create().build();
 		URI restURL;
 		try {
-			//remote service URI is http://wesenseit-vm1.shef.ac.uk:8080/movemore-1.0-SNAPSHOT/services/json/device
-			//restURL = new URI("http://wesenseit-vm1.shef.ac.uk:8080/movemore-1.0-SNAPSHOT/services/json/device");
-			restURL = new URI("https://wesenseit-vm1.shef.ac.uk:8443/movemore/services/json/device");
+			restURL = new URI("https://wesenseit-vm1.shef.ac.uk:8443/moveMore/services/json/device");
 			//create http post request
 			HttpPost postRequest = new HttpPost(restURL);
 			
 			//assemble nameValuePair for posting
-			List<NameValuePair> peopleCounterValues = new ArrayList<NameValuePair>();
+			List<NameValuePair> newSensorRegistrationData = new ArrayList<NameValuePair>();
 			
-			peopleCounterValues.add(new BasicNameValuePair("deviceId", newDevicePhysicalId));
-			peopleCounterValues.add(new BasicNameValuePair("deviceName", newDeviceName));
-			peopleCounterValues.add(new BasicNameValuePair("sensorId", newSensorPhysicalId));
-			peopleCounterValues.add(new BasicNameValuePair("sensorName", newSensorName));
-		//	peopleCounterValues.add(new BasicNameValuePair("batteryLevel", "0.80"));
-//			peopleCounterValues.add(new BasicNameValuePair("latitude", String.valueOf(latitude)));
-//			peopleCounterValues.add(new BasicNameValuePair("longitude", longitude + ""));
-			peopleCounterValues.add(new BasicNameValuePair("sensorDesc", "The numfaces sensor is developed by Dr. Stuart to provide real-time monitoring of pedestrian flow. The sensor is implemented using OpenCV and able to count people in a crowd by using face detection from cameras automatically."));
-	        postRequest.setEntity(new UrlEncodedFormEntity(peopleCounterValues));
+			newSensorRegistrationData.add(new BasicNameValuePair("deviceId", newDevicePhysicalId));
+			newSensorRegistrationData.add(new BasicNameValuePair("deviceName", newDeviceName));
+			newSensorRegistrationData.add(new BasicNameValuePair("sensorId", newSensorPhysicalId));
+			newSensorRegistrationData.add(new BasicNameValuePair("sensorName", newSensorName));
+		//	newSensorRegistrationData.add(new BasicNameValuePair("batteryLevel", "0.80"));
+			newSensorRegistrationData.add(new BasicNameValuePair("latitude", String.valueOf(latitude)));
+			newSensorRegistrationData.add(new BasicNameValuePair("longitude", String.valueOf(latitude)));
+			newSensorRegistrationData.add(new BasicNameValuePair("sensorDesc", "This is a activity sensor."));
+	        postRequest.setEntity(new UrlEncodedFormEntity(newSensorRegistrationData));
 			
 	      //submit post request and return the response synchronously
 			HttpResponse resp = client.execute(postRequest);
-			if(resp.getStatusLine().getStatusCode() == 200) {
-				HttpEntity entity = resp.getEntity();
-				String respbody = EntityUtils.toString(entity);
-				JSONObject jsonobj = new JSONObject(respbody);
-				Integer isSuccess = (Integer) jsonobj.get("isSuccess");
-				if(isSuccess < 0) {
-					// failure response, do sth...
-					System.out.println(jsonobj.get("message"));
-					System.out.println(jsonobj.get("reason"));
-				} else {
-					System.out.print("Bluetooth scanner sensor reading has been sumibitted successfully.");
-				}
+			if(resp.getStatusLine().getStatusCode() == Status.OK.getStatusCode()) {
+				HttpEntity respEntity = resp.getEntity();
+				JSONObject jsonobj = new JSONObject(EntityUtils.toString(respEntity));
+				Long sensorId = jsonobj.getLong("sensorId");
+				
+				System.out.print("Activity sensor has been successfully registered. sensor id is ["+sensorId+"]");
+				
 			} else if (resp.getStatusLine().getStatusCode() == 302) {
 				System.out.print("Serivce for the REST URL is not available.");
 			}

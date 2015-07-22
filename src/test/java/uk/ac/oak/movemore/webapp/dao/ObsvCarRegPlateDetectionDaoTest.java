@@ -81,11 +81,11 @@ public class ObsvCarRegPlateDetectionDaoTest extends BaseDaoTestCase {
 
 		for (ObsvCarRegPlateDetection ocrp : carRegPlateObsvs) {
 			if (ocrp.getCarRegPlateNum().equals(carRegPlateNum3)) {
-				Assert.assertTrue(Float.valueOf((float) latitude3)
-						.compareTo(ocrp.getLatitude()) == 0 || Float.valueOf((float) latitude3)
+				Assert.assertTrue(Double.valueOf(latitude3)
+						.compareTo(ocrp.getLatitude()) == 0 || Double.valueOf(latitude3)
 								.compareTo(ocrp.getLatitude()) == 1);
-				Assert.assertTrue(Float.valueOf((float) longitude3)
-						.compareTo(ocrp.getLongitude()) == 0 || Float.valueOf((float) longitude3)
+				Assert.assertTrue(Double.valueOf(longitude3)
+						.compareTo(ocrp.getLongitude()) == 0 || Double.valueOf(longitude3)
 						.compareTo(ocrp.getLongitude()) == 1);
 				// ignore the HexCarRegPlateNum value for now
 				// Assert.assertEquals(ObsvCarRegPlateDetection.convertCarRegPlateNum(carRegPlateNum3),
@@ -183,8 +183,8 @@ public class ObsvCarRegPlateDetectionDaoTest extends BaseDaoTestCase {
 
 		ObsvCarRegPlateDetection carPlateObsv = new ObsvCarRegPlateDetection(
 				obsv, carRegPlateNum, obsvTime);
-		carPlateObsv.setLatitude((float) latitude);
-		carPlateObsv.setLongitude((float) longitude);
+		carPlateObsv.setLatitude(latitude);
+		carPlateObsv.setLongitude(longitude);
 
 		obsv.setObsvCarRegPlateDetect(carPlateObsv);
 
@@ -199,11 +199,11 @@ public class ObsvCarRegPlateDetectionDaoTest extends BaseDaoTestCase {
 
 		Assert.assertEquals(
 				0,
-				Float.valueOf((float) latitude).compareTo(
+				Double.valueOf(latitude).compareTo(
 						obsv.getObsvCarRegPlateDetect().getLatitude()));
 		Assert.assertEquals(
 				0,
-				Float.valueOf((float) longitude).compareTo(
+				Double.valueOf(longitude).compareTo(
 						obsv.getObsvCarRegPlateDetect().getLongitude()));
 
 		// Ignore the car plate number hashing for now

@@ -30,8 +30,8 @@ public class ObsvVoiceDecibelDetectionDaoTest extends BaseDaoTestCase {
 	public void testInsert() throws Exception {
 		Long sensorId = 3000001l;
 		Double decibel = 53.0;
-		Float latitude = 53.383f;
-		Float longitude = -1.4659f;
+		Double latitude = 53.383d;
+		Double longitude = -1.4659d;
 		Date obsvTime = new Date();
 		
 		Sensors dummySensor = sensorsDao.get(sensorId);

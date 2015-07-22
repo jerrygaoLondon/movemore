@@ -82,9 +82,9 @@ public class ObsvPeopleCountDaoTest extends BaseDaoTestCase {
 
 		for (ObsvPeopleCount opc : obsvPcList) {
 			if (opc.getNumber().equals(peopleNumber3)) {
-				Assert.assertEquals(0, Float.valueOf((float) latitude3)
+				Assert.assertEquals(0, Double.valueOf(latitude3)
 						.compareTo(opc.getLatitude()));
-				Assert.assertEquals(0, Float.valueOf((float) longitude3)
+				Assert.assertEquals(0, Double.valueOf(longitude3)
 						.compareTo(opc.getLongitude()));
 			}
 		}
@@ -258,8 +258,8 @@ public class ObsvPeopleCountDaoTest extends BaseDaoTestCase {
 
 		ObsvPeopleCount peopleCounterObsv = new ObsvPeopleCount(obsv,
 				peopleNumber, obsvTime);
-		peopleCounterObsv.setLatitude((float) latitude);
-		peopleCounterObsv.setLongitude((float) longitude);
+		peopleCounterObsv.setLatitude(latitude);
+		peopleCounterObsv.setLongitude(longitude);
 
 		obsv.setObsvPeopleCount(peopleCounterObsv);
 		peopleCounterObsv.setpCount(obsv);

@@ -19,8 +19,8 @@ public class ObsvPeopleCountVO  implements Serializable{
 	private String obsvTime;
 
 	// observation location
-	private Float longitude;
-	private Float latitude;
+	private Double longitude;
+	private Double latitude;
 //	private Date created;
 	private Date updated;
 	private Integer version;
@@ -49,16 +49,16 @@ public class ObsvPeopleCountVO  implements Serializable{
 	public void setObsvTime(String obsvTime) {
 		this.obsvTime = obsvTime;
 	}
-	public Float getLongitude() {
+	public Double getLongitude() {
 		return longitude;
 	}
-	public void setLongitude(Float longitude) {
+	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
 	}
-	public Float getLatitude() {
+	public Double getLatitude() {
 		return latitude;
 	}
-	public void setLatitude(Float latitude) {
+	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
 	}
 //	public Date getCreated() {

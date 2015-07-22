@@ -388,12 +388,12 @@ public class OBDCarSpeedSensorObsvProcessor implements
 		obsvOBDDetection.setAmbientAirTemperature(temperValue);
 		obsvOBDDetection.setVehicleSpeed(speedValue);
 		obsvOBDDetection.setEngineRPM(rpmValue);
-		obsvOBDDetection.setLatitude(latitude.floatValue());
-		obsvOBDDetection.setLongitude(longitude.floatValue());
+		obsvOBDDetection.setLatitude(latitude);
+		obsvOBDDetection.setLongitude(longitude);
 		obsvOBDDetection.setObsvTime(obsvTime);
 
-		obsv.setLatitude(latitude.floatValue());
-		obsv.setLongitude(longitude.floatValue());
+		obsv.setLatitude(latitude);
+		obsv.setLongitude(longitude);
 		obsv.setObsvTime(obsvTime);
 	}
 

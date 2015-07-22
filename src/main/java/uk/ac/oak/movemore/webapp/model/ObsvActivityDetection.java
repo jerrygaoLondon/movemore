@@ -31,25 +31,28 @@ public class ObsvActivityDetection extends BaseObject implements Serializable {
 	private static final long serialVersionUID = -8876675334489052141L;
 	private Long obsvId;
 	private Observations activitySensor;
-	private String activityType;
+	private Integer activityType;
 	private Double confidence;
+	private Integer floorClimbed;
 
 	private Double speed;
 	// The observation time sent from sensor
 	private Date obsvTime;
 
 	// observation location
-	private Float longitude;
-	private Float latitude;
+	private Double longitude;
+	private Double latitude;
 	private Double locAccuracy;
+	
+	private Integer stepsDoneToday;
+	private Long duration;
 	
 	private ObsvActivityNorm obsvActivityNorm;
 
 	public ObsvActivityDetection() {
-
 	}
 
-	public ObsvActivityDetection(Float longitude, Float latitude, Date obsvTime) {
+	public ObsvActivityDetection(Double longitude, Double latitude, Date obsvTime) {
 		setLongitude(longitude);
 		setLatitude(latitude);
 		setObsvTime(obsvTime);
@@ -86,11 +89,15 @@ public class ObsvActivityDetection extends BaseObject implements Serializable {
 	}
 
 	@Column
-	public String getActivityType() {
+	public Integer getActivityType() {
 		return activityType;
 	}
-
-	public void setActivityType(String activityType) {
+	/**
+	 * Activity type corresponds to Google DetectedActivity API for Android
+	 * @see https://developers.google.com/android/reference/com/google/android/gms/location/DetectedActivity.html
+	 * @param activityType
+	 */
+	public void setActivityType(Integer activityType) {
 		this.activityType = activityType;
 	}
 
@@ -111,6 +118,15 @@ public class ObsvActivityDetection extends BaseObject implements Serializable {
 	public void setConfidence(Double confidence) {
 		this.confidence = confidence;
 	}
+	
+	@Column
+	public Integer getFloorClimbed() {
+		return floorClimbed;
+	}
+
+	public void setFloorClimbed(Integer floorClimbed) {
+		this.floorClimbed = floorClimbed;
+	}
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "obsv_time", updatable = true)
@@ -122,21 +138,21 @@ public class ObsvActivityDetection extends BaseObject implements Serializable {
 		this.obsvTime = obsvTime;
 	}
 
-	@Column(name = "longitude", precision = 13, scale = 10, updatable = false)
-	public Float getLongitude() {
+	@Column(name = "longitude", updatable = false)
+	public Double getLongitude() {
 		return longitude;
 	}
 
-	public void setLongitude(Float longitude) {
+	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
 	}
 
-	@Column(name = "latitude", precision = 13, scale = 10, updatable = false)
-	public Float getLatitude() {
+	@Column(name = "latitude", updatable = false)
+	public Double getLatitude() {
 		return latitude;
 	}
 
-	public void setLatitude(Float latitude) {
+	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
 	}
 
@@ -147,6 +163,24 @@ public class ObsvActivityDetection extends BaseObject implements Serializable {
 
 	public void setLocAccuracy(Double locAccuracy) {
 		this.locAccuracy = locAccuracy;
+	}
+	
+	@Column
+	public Integer getStepsDoneToday() {
+		return stepsDoneToday;
+	}
+
+	public void setStepsDoneToday(Integer stepsDoneToday) {
+		this.stepsDoneToday = stepsDoneToday;
+	}
+	
+	@Column
+	public Long getDuration() {
+		return duration;
+	}
+
+	public void setDuration(Long duration) {
+		this.duration = duration;
 	}
 
 	@Override

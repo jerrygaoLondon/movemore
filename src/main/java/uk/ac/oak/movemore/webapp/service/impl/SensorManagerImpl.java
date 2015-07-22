@@ -1,6 +1,5 @@
 package uk.ac.oak.movemore.webapp.service.impl;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -236,25 +235,29 @@ public class SensorManagerImpl extends GenericManagerImpl<Sensors, Long>
 				if (StringUtils.isNotEmpty(sensorType)) {
 					sensor.setSensorType(Integer.valueOf(sensorType));	
 				}
+//				else{
+//					sensor.setSensorType(SensorTypeEnum.SENSOR_TYPE_ACTIVITY_SENSOR.getSensorType());
+//				}
 				return sensorsDao.save(sensor);
 			} catch (SensorNotFoundException de) {
 				log.error("Unexpected Exception:" + de.toString());
 			}
-		}
-
+		}		
+		
 		sensor = new Sensors(sensorPhysicalId, sensorName, sensorDescription);
 		sensor.setDevice(device);
 
 		if (StringUtils.isEmpty(sensorType)) {
+			/*
 			SensorTypeEnum predictedSensorType = SensorTypeClassifer
 					.guessSensorType(sensorPhysicalId, sensorName);
-			sensor.setSensorType(predictedSensorType.getSensorType());
+			sensor.setSensorType(predictedSensorType.getSensorType());*/
 		} else {
 			sensor.setSensorType(Integer.valueOf(sensorType));	
 		}
 
-		sensor = sensorsDao.save(sensor);
-
+		sensor = sensorsDao.save(sensor);		
+		
 		return sensor;
 	}
 

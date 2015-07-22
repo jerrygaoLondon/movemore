@@ -77,9 +77,9 @@ public class ObsvDeviceDetectionDaoTest extends BaseDaoTestCase {
 		
 		for (ObsvDeviceDetection odd : obsvDeviceDetections) {
 			if (odd.getMacAddress().equals(macAddress2)) {
-				Assert.assertEquals(0, Float.valueOf((float) latitude3)
+				Assert.assertEquals(0, Double.valueOf(latitude3)
 						.compareTo(odd.getLatitude()));
-				Assert.assertEquals(0, Float.valueOf((float) longitude3)
+				Assert.assertEquals(0, Double.valueOf(longitude3)
 						.compareTo(odd.getLongitude()));
 				Assert.assertEquals(signalStrength2, odd.getSignalStrength());
 			}
@@ -172,8 +172,8 @@ public class ObsvDeviceDetectionDaoTest extends BaseDaoTestCase {
 		ObsvDeviceDetection deviceDetectionObsv = new ObsvDeviceDetection(obsv,
 				macAddress, obsvTime);
 		deviceDetectionObsv.setSignalStrength(signalStrength);
-		deviceDetectionObsv.setLatitude((float) latitude);
-		deviceDetectionObsv.setLongitude((float) longitude);
+		deviceDetectionObsv.setLatitude(latitude);
+		deviceDetectionObsv.setLongitude(longitude);
 
 		obsv.setObsvDeviceDetect(deviceDetectionObsv);
 		deviceDetectionObsv.setDevDetect(obsv);
@@ -187,9 +187,9 @@ public class ObsvDeviceDetectionDaoTest extends BaseDaoTestCase {
 		Assert.assertNotNull(obsv.getObsvDeviceDetect().getLatitude());
 		Assert.assertNotNull(obsv.getObsvDeviceDetect().getLongitude());
 		
-		Assert.assertEquals(0, Float.valueOf((float) latitude)
+		Assert.assertEquals(0, Double.valueOf(latitude)
 				.compareTo(obsv.getObsvDeviceDetect().getLatitude()));
-		Assert.assertEquals(0, Float.valueOf((float) longitude)
+		Assert.assertEquals(0, Double.valueOf(longitude)
 				.compareTo(obsv.getObsvDeviceDetect().getLongitude()));
 		
 		Assert.assertEquals(signalStrength, obsv.getObsvDeviceDetect().getSignalStrength());

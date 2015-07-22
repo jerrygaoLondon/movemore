@@ -2,16 +2,17 @@ package uk.ac.oak.movemore.webapp.service;
 
 import java.util.Set;
 
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
 import org.appfuse.service.BaseManagerTestCase;
+import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import uk.ac.oak.movemore.webapp.model.Device;
 import uk.ac.oak.movemore.webapp.model.Sensors;
-import uk.ac.oak.movemore.webapp.service.response.JSONResponse;
-import uk.ac.oak.movemore.webapp.service.response.DeviceServiceSuccess;
-import uk.ac.oak.movemore.webapp.service.response.ServiceResponseFailure;
 
 public class DeviceManagerTest extends BaseManagerTestCase {
 
@@ -25,30 +26,40 @@ public class DeviceManagerTest extends BaseManagerTestCase {
 	public void testUpdateDeviceLocation() throws Exception {
 
 		Long deviceId = 1000001L;
-		Float latitude = 38.891300f;
-		Float longtitude = -77.025900f;
+		Double latitude = 38.891300d;
+		Double longtitude = -77.025900d;
 
-		JSONResponse jsonResp = deviceManager.updateDeviceLocation(
+		Response jsonResp = deviceManager.updateDeviceLocation(
 				deviceId.toString(), latitude, longtitude);
 
-		Assert.assertTrue(jsonResp instanceof DeviceServiceSuccess);
+		//Assert.assertTrue(jsonResp instanceof DeviceServiceSuccess);
+		Assert.assertNotNull(jsonResp);		
+		Assert.assertEquals(Status.OK.getStatusCode(), jsonResp.getStatus());
 	}
 
 	@Test
 	public void testRegisterNewDevice() throws Exception {
 		String devicePhysicalId = "00CC02EE038C33BC";
-		Float latitude = 38.891300f;
-		Float longtitude = -77.025900f;
+		Double latitude = 38.891300d;
+		Double longtitude = -77.025900d;
 		String deviceName = "Device Test Name";
 
-		JSONResponse jsonResp = deviceManager.registerNewDevice(
+		Response jsonResp = deviceManager.registerNewDevice(
 				devicePhysicalId, latitude, longtitude, deviceName);
-		Assert.assertTrue(jsonResp instanceof DeviceServiceSuccess);
+		Assert.assertNotNull(jsonResp);
+		
+		Assert.assertEquals(Status.OK.getStatusCode(), jsonResp.getStatus());
+		
+//		Assert.assertTrue(jsonResp instanceof DeviceServiceSuccess);
 
-		Assert.assertEquals(new Integer(1), jsonResp.getIsSuccess());
+//		Assert.assertEquals(new Integer(1), jsonResp.getIsSuccess());
 
-		Assert.assertNotNull(((DeviceServiceSuccess) jsonResp).getDeviceId());
-		String deviceId = ((DeviceServiceSuccess) jsonResp).getDeviceId();
+//		Assert.assertNotNull(((DeviceServiceSuccess) jsonResp).getDeviceId());
+		
+		JSONObject jsonObj = new JSONObject(String.valueOf(jsonResp.getEntity()));
+		Assert.assertNotNull(jsonObj);
+//		String deviceId = ((DeviceServiceSuccess) jsonResp).getDeviceId();
+		String deviceId = jsonObj.getString("deviceId");
 
 		Assert.assertTrue(deviceManager.exists(Long.valueOf(deviceId)));
 		Device newDevice = deviceManager.get(Long.valueOf(deviceId));
@@ -63,20 +74,25 @@ public class DeviceManagerTest extends BaseManagerTestCase {
 	@Test
 	public void testRegisterDuplicatedDevice() throws Exception {
 		String devicePhysicalId = "00CC02EE038C";
-		Float latitude = 38.891300f;
-		Float longtitude = -77.025900f;
+		Double latitude = 38.891300d;
+		Double longtitude = -77.025900d;
 		String deviceName = "Device Test Name";
 
-		JSONResponse jsonResp = deviceManager.registerNewDevice(
+		Response jsonResp = deviceManager.registerNewDevice(
 				devicePhysicalId, latitude, longtitude, deviceName);
-		Assert.assertTrue(jsonResp instanceof ServiceResponseFailure);
+//		Assert.assertTrue(jsonResp instanceof ServiceResponseFailure);
 
-		Assert.assertEquals(new Integer(-2), jsonResp.getIsSuccess());
-		Assert.assertNotNull(((ServiceResponseFailure) jsonResp).getReason());
+//		Assert.assertEquals(new Integer(-2), jsonResp.getIsSuccess());
+		Assert.assertNotNull(jsonResp);
+		
+		Assert.assertEquals(Status.CONFLICT.getStatusCode(), jsonResp.getStatus());
+		
+//		String reason=(String)jsonResp.getEntity();
+//		Assert.assertNotNull(((ServiceResponseFailure) jsonResp).getReason());
 
-		Assert.assertEquals("'{devicePhysicalId}' is registered.",
-				((ServiceResponseFailure) jsonResp).getReason());
-		Assert.assertNotNull(((ServiceResponseFailure) jsonResp).getMessage());
+//		Assert.assertEquals("'{devicePhysicalId}' is registered.",
+//				((ServiceResponseFailure) jsonResp).getReason());
+//		Assert.assertNotNull(((ServiceResponseFailure) jsonResp).getMessage());
 	}
 
 	//
@@ -93,21 +109,23 @@ public class DeviceManagerTest extends BaseManagerTestCase {
 		String sensorPhysicalId = "b827eb2eb26e";
 		String sensorName = "Dummy water velocity sensor for testing";
 
-		JSONResponse deviceResp = deviceManager.registerOrUpdateDeviceInfo(
+		Response deviceResp = deviceManager.registerOrUpdateDeviceInfo(
 				devicePhysicalId, deviceName, sensorPhysicalId, sensorName,
 				latitude, longitude, null, sensorName, null);
-		Assert.assertTrue(deviceResp instanceof DeviceServiceSuccess);
+//		Assert.assertTrue(deviceResp instanceof DeviceServiceSuccess);
+		Assert.assertNotNull(deviceResp);		
+		Assert.assertEquals(Status.OK.getStatusCode(), deviceResp.getStatus());
 
-		Assert.assertEquals(new Integer(1),
-				((DeviceServiceSuccess) deviceResp).getIsSuccess());
+//		Assert.assertEquals(new Integer(1),
+//				((DeviceServiceSuccess) deviceResp).getIsSuccess());
 
 		Device device = deviceManager.findDeviceByPhysicalId(devicePhysicalId);
 		Assert.assertNotNull(device);
 
 		Assert.assertEquals(deviceName, device.getName());
-		Assert.assertEquals(Float.valueOf((float) latitude),
+		Assert.assertEquals(Double.valueOf(latitude),
 				device.getLatitude());
-		Assert.assertEquals(Float.valueOf((float) longitude),
+		Assert.assertEquals(Double.valueOf(longitude),
 				device.getLongitude());
 
 		Set<Sensors> sensorSet = device.getSensors();
@@ -135,21 +153,24 @@ public class DeviceManagerTest extends BaseManagerTestCase {
 		Assert.assertNotNull(existingDevice.getSensors());
 		Assert.assertEquals(1, existingDevice.getSensors().size());
 
-		JSONResponse deviceResp = deviceManager.registerOrUpdateDeviceInfo(
+		Response deviceResp = deviceManager.registerOrUpdateDeviceInfo(
 				devicePhysicalId, deviceName, newSensorPhysicalId,
 				newSensorName, latitude, longitude, null, newSensorName, null);
-		Assert.assertTrue(deviceResp instanceof DeviceServiceSuccess);
-
-		Assert.assertEquals(new Integer(1),
-				((DeviceServiceSuccess) deviceResp).getIsSuccess());
+//		Assert.assertTrue(deviceResp instanceof DeviceServiceSuccess);
+//
+//		Assert.assertEquals(new Integer(1),
+//				((DeviceServiceSuccess) deviceResp).getIsSuccess());
+		
+		Assert.assertNotNull(deviceResp);		
+		Assert.assertEquals(Status.OK.getStatusCode(), deviceResp.getStatus());
 
 		Device device = deviceManager.findDeviceByPhysicalId(devicePhysicalId);
 		Assert.assertNotNull(device);
 
 		Assert.assertEquals(deviceName, device.getName());
-		Assert.assertEquals(Float.valueOf((float) latitude),
+		Assert.assertEquals(Double.valueOf(latitude),
 				device.getLatitude());
-		Assert.assertEquals(Float.valueOf((float) longitude),
+		Assert.assertEquals(Double.valueOf(longitude),
 				device.getLongitude());
 
 		Set<Sensors> sensorSet = device.getSensors();
@@ -179,19 +200,21 @@ public class DeviceManagerTest extends BaseManagerTestCase {
 		String newSensorPhysicalId = "b827nn2FF26ett";
 		String newSensorName = "Dummy sensor for Glastonbury";
 
-		JSONResponse deviceResp = deviceManager.registerOrUpdateDeviceInfo(
+		Response deviceResp = deviceManager.registerOrUpdateDeviceInfo(
 				newDevicePhysicalId, newDeviceName, newSensorPhysicalId,
 				newSensorName, latitude, longitude, null, newSensorName, null);
-		Assert.assertTrue(deviceResp instanceof DeviceServiceSuccess);
+//		Assert.assertTrue(deviceResp instanceof DeviceServiceSuccess);
+		Assert.assertNotNull(deviceResp);		
+		Assert.assertEquals(Status.OK.getStatusCode(), deviceResp.getStatus());
 
 		Device device = deviceManager
 				.findDeviceByPhysicalId(newDevicePhysicalId);
 		Assert.assertNotNull(device);
 
 		Assert.assertEquals(newDeviceName, device.getName());
-		Assert.assertEquals(Float.valueOf((float) latitude),
+		Assert.assertEquals(Double.valueOf(latitude),
 				device.getLatitude());
-		Assert.assertEquals(Float.valueOf((float) longitude),
+		Assert.assertEquals(Double.valueOf(longitude),
 				device.getLongitude());
 
 		boolean isExist = sensorManager

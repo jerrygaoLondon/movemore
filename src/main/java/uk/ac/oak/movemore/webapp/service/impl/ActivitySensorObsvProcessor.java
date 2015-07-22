@@ -27,6 +27,7 @@ import uk.ac.oak.movemore.webapp.service.SensorObservationManager;
 import uk.ac.oak.movemore.webapp.service.SensorObservationsProcessor;
 import uk.ac.oak.movemore.webapp.util.DateUtil;
 import uk.ac.oak.movemore.webapp.util.SensorTypeEnum;
+import uk.ac.oak.movemore.webapp.util.StandardDateFormatter;
 import uk.ac.oak.movemore.webapp.vo.ObsvActivityDetectionVO;
 
 public class ActivitySensorObsvProcessor implements SensorObservationsProcessor {
@@ -44,50 +45,39 @@ public class ActivitySensorObsvProcessor implements SensorObservationsProcessor 
 							obsv.getSensor().getName(), obsv.getValue(),
 							obsv.getObsvTime()));
 			try {
-				JSONObject jsonObj = new JSONObject(obsv.getValue());
-				String activityType = jsonObj.getString("finalActivity");
-				Double confidence = jsonObj.getDouble("confidence");
+				JSONObject jsonObj = new JSONObject(obsv.getValue());				
+				
+				Integer stepsDoneToday = jsonObj.getInt("stepsDoneToday");
+				
+				JSONObject activityObj = jsonObj.getJSONObject("activityDescription");
+				Integer activityType = activityObj.getInt("type");
+				Long duration = activityObj.getLong("duration");				
+				String obsvTimeStr = activityObj.getString("time");
+				Date obsvTime = StandardDateFormatter.parse(obsvTimeStr);
+				Double confidence = activityObj.getDouble("confidence");
+				
+				Integer floorClimbed=jsonObj.getInt("floorClimbed");				
+				
 				Double longitude = null;
 				Double latitude = null;
-				Double speed = null;
 				Double locAccuracy = null;
-				Timestamp obsvTime = null;
-
-				if (!jsonObj.isNull("location")) {
-					// TODO: changed on 27-07-2014 for new internal sensor data
-					// structures, meanwhile compatible for old version
-					JSONObject locObj = jsonObj.getJSONObject("location");
-					longitude = locObj.getDouble("longitude");
-					latitude = locObj.getDouble("latitude");
-					speed = locObj.getDouble("speed");
-					// obsvTime = locObj.getLong("mTime") == 0 ? null : new
-					// Timestamp(locObj.getLong("mTime"));
-					locAccuracy = locObj.getDouble("accuracy");
-				} else {
-					longitude = jsonObj.getDouble("longitude");
-				}
-
-				if (latitude == null) {
-					latitude = jsonObj.getDouble("latitude");
-				}
-
-				if (speed == null) {
-					speed = jsonObj.getDouble("speed");
-				}
-				// Double locAccuracy = jsonObj.getDouble("locAccuracy");
-
-				obsvTime = new Timestamp(jsonObj.getLong("time"));
+				
+				JSONObject locObj = jsonObj.getJSONObject("activityLocation");
+				locAccuracy=locObj.getDouble("accuracy");
+				longitude = jsonObj.getDouble("longitude");
+				latitude = jsonObj.getDouble("latitude");
 
 				ObsvActivityDetection obsvActivityDetection = new ObsvActivityDetection(
-						longitude.floatValue(), latitude.floatValue(), obsvTime);
-
+						longitude, latitude, obsvTime);
+				obsvActivityDetection.setFloorClimbed(floorClimbed);
 				obsvActivityDetection.setActivityType(activityType);
 				obsvActivityDetection.setConfidence(confidence);
-				obsvActivityDetection.setSpeed(speed);
+				obsvActivityDetection.setStepsDoneToday(stepsDoneToday);
+				obsvActivityDetection.setDuration(duration);
 				obsvActivityDetection.setLocAccuracy(locAccuracy);
 
-				obsv.setLatitude(latitude.floatValue());
-				obsv.setLongitude(longitude.floatValue());
+				obsv.setLatitude(latitude);
+				obsv.setLongitude(longitude);
 				
 				obsvActivityDetection.setActivitySensor(obsv);
 				obsv.setObsvActivityDetect(obsvActivityDetection);
@@ -143,12 +133,12 @@ public class ActivitySensorObsvProcessor implements SensorObservationsProcessor 
 				Timestamp obsvTime = new Timestamp(trkTime.getMillis());
 
 				obsv = new Observations(sensor, tp.toString(), obsvTime);
-				obsv.setLatitude(latitude.floatValue());
-				obsv.setLongitude(longitude.floatValue());
+				obsv.setLatitude(latitude);
+				obsv.setLongitude(longitude);
 
 				ObsvActivityDetection obsvActivityDetection = new ObsvActivityDetection(
-						longitude.floatValue(), latitude.floatValue(), obsvTime);
-				obsvActivityDetection.setActivityType("Running");
+						longitude, latitude, obsvTime);
+				obsvActivityDetection.setActivityType(8);
 				if (speed != null) {
 					obsvActivityDetection.setSpeed(Double.valueOf(speed));
 				}
@@ -339,7 +329,7 @@ public class ActivitySensorObsvProcessor implements SensorObservationsProcessor 
 			
 			if (obsvActivityDetection.getObsvActivityNorm() != null) {
 				if (StringUtils.isNotEmpty(finalActivityType)) {
-					obsvActivityDetection.getObsvActivityNorm().setFinalActivityType(finalActivityType);
+					obsvActivityDetection.getObsvActivityNorm().setFinalActivityType(Integer.valueOf(finalActivityType));
 				}
 				if (StringUtils.isNotEmpty(finalLatitude)) {
 					obsvActivityDetection.getObsvActivityNorm().setFinalLatitude(finalLat);
@@ -351,7 +341,7 @@ public class ActivitySensorObsvProcessor implements SensorObservationsProcessor 
 					obsvActivityDetection.getObsvActivityNorm().setFinalConfidence(finalConf);
 				}				
 			} else {
-				ObsvActivityNorm obsvActivityNorm = new ObsvActivityNorm(finalLat, finalLog, finalActivityType, finalConf);
+				ObsvActivityNorm obsvActivityNorm = new ObsvActivityNorm(finalLat, finalLog, Integer.valueOf(finalActivityType), finalConf);
 				
 				obsvActivityDetection.setObsvActivityNorm(obsvActivityNorm);
 				obsvActivityNorm.setActivityObsv(obsvActivityDetection);

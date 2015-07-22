@@ -43,8 +43,8 @@ public class ObsvCarRegPlateDetection extends BaseObject implements Serializable
 	private Date obsvTime;
 
 	// observation location
-	private Float longitude;
-	private Float latitude;
+	private Double longitude;
+	private Double latitude;
 	
 	public ObsvCarRegPlateDetection() {
 	}
@@ -119,21 +119,21 @@ public class ObsvCarRegPlateDetection extends BaseObject implements Serializable
 		this.obsvTime = obsvTime;
 	}
 
-	@Column(name = "longitude", precision = 13, scale = 10, updatable=false)
-	public Float getLongitude() {
+	@Column(name = "longitude", updatable=false)
+	public Double getLongitude() {
 		return longitude;
 	}
 
-	public void setLongitude(Float longitude) {
+	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
 	}
 	
-	@Column(name = "latitude", precision = 13, scale = 10, updatable=false)
-	public Float getLatitude() {
+	@Column(name = "latitude", updatable=false)
+	public Double getLatitude() {
 		return latitude;
 	}
 
-	public void setLatitude(Float latitude) {
+	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
 	}
 

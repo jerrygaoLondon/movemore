@@ -24,7 +24,7 @@ public class ObsvActivityNorm extends BaseObject implements Serializable {
 
 	private Double finalLongitude;
 	private Double finalLatitude;
-	private String finalActivityType;
+	private Integer finalActivityType;
 	private Double finalConfidence;
 
 	private Date updated;
@@ -34,7 +34,7 @@ public class ObsvActivityNorm extends BaseObject implements Serializable {
 	}
 
 	public ObsvActivityNorm(Double finalLatitude, Double finalLongitude,
-			String finalActivityType, Double finalConfidence) {
+			Integer finalActivityType, Double finalConfidence) {
 		this.finalLongitude = finalLongitude;
 		this.finalLatitude = finalLatitude;
 		this.finalActivityType = finalActivityType;
@@ -72,11 +72,11 @@ public class ObsvActivityNorm extends BaseObject implements Serializable {
 	}
 
 	@Column(name = "final_activityType")
-	public String getFinalActivityType() {
+	public Integer getFinalActivityType() {
 		return finalActivityType;
 	}
 
-	public void setFinalActivityType(String finalActivityType) {
+	public void setFinalActivityType(Integer finalActivityType) {
 		this.finalActivityType = finalActivityType;
 		this.updated = new Date();
 	}

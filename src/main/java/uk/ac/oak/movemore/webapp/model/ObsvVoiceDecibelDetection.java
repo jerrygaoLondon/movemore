@@ -40,8 +40,8 @@ public class ObsvVoiceDecibelDetection extends BaseObject implements
 	private Date obsvTime;
 
 	// observation location
-	private Float longitude;
-	private Float latitude;
+	private Double longitude;
+	private Double latitude;
 	
 	private String attachment;
 	
@@ -49,7 +49,7 @@ public class ObsvVoiceDecibelDetection extends BaseObject implements
 		
 	}
 	
-	public ObsvVoiceDecibelDetection(Double decibel, Float longitude, Float latitude, Date obsvTime) {
+	public ObsvVoiceDecibelDetection(Double decibel, Double longitude, Double latitude, Date obsvTime) {
 		setDecibel(decibel);
 		setLongitude(longitude);
 		setLatitude(latitude);
@@ -100,20 +100,20 @@ public class ObsvVoiceDecibelDetection extends BaseObject implements
 	}
 	
 	@Column(name = "longitude", precision = 13, scale = 10, updatable = false)
-	public Float getLongitude() {
+	public Double getLongitude() {
 		return longitude;
 	}
 
-	public void setLongitude(Float longitude) {
+	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
 	}
 
 	@Column(name = "latitude", precision = 13, scale = 10, updatable = false)
-	public Float getLatitude() {
+	public Double getLatitude() {
 		return latitude;
 	}
 
-	public void setLatitude(Float latitude) {
+	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
 	}
 

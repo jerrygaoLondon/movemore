@@ -45,9 +45,9 @@ public class Device extends BaseObject implements Serializable {
 	// device MAC Address
 //	private String macAddress;
 	// device current location
-	private Float longitude;
+	private Double longitude;
 
-	private Float latitude;
+	private Double latitude;
 	
 	private Float batteryLevel;
 	// device current/last known IP address
@@ -108,21 +108,21 @@ public class Device extends BaseObject implements Serializable {
 		this.description = description;
 	}
 
-	@Column(name = "longitude", precision = 13, scale = 10)
-	public Float getLongitude() {
+	@Column(name = "longitude")
+	public Double getLongitude() {
 		return longitude;
 	}
 
-	public void setLongitude(Float longitude) {
+	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
 	}
 	
-	@Column(name = "latitude", precision = 13, scale = 10)
-	public Float getLatitude() {
+	@Column(name = "latitude")
+	public Double getLatitude() {
 		return latitude;
 	}
 
-	public void setLatitude(Float latitude) {
+	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
 	}
 

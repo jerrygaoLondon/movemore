@@ -415,16 +415,24 @@
     	<column>confidence</column>
     	<column>latitude</column>
     	<column>longitude</column>
-    	<column>obsv_time</column>    	
+    	
+    	<column>locAccuracy</column>
+    	<column>stepsDoneToday</column>
+    	<column>duration</column>
+    	
+    	<column>obsv_time</column>
     	<column>created</column>
     	<column>updated</column>
     	<column>version</column>
     	<row>
     		<value description="activitySensor_obsv_id">4000007</value>
-            <value description="activityType">Vehicle</value>
+            <value description="activityType">7</value>
             <value description="confidence">80</value>
             <value description="latitude">+53.36297</value>
             <value description="longitude">-1.4859</value>
+            <value description="locAccuracy">1.0</value>
+            <value description="stepsDoneToday">100</value>
+            <value description="duration">123322</value>
             <value description="obsv_time">2014-07-21 22:00:01</value>
             <value description="created">2014-07-21 22:00:01</value>
             <value description="updated">2014-07-21 22:00:01</value>

@@ -76,6 +76,35 @@ public class DateUtil {
 
 		return _obsvTime;
 	}
+	
+	public static boolean isValidStandardTimeStamp(String inputString) {
+//		SimpleDateFormat format = new java.text.SimpleDateFormat(
+//				"yyyy-MM-dd'T'HH:mm:ssZ");
+//		try {
+//			format.parse(inputString);
+//			return true;
+//		} catch (ParseException e) {
+//			return false;
+//		}
+		boolean isValid=true;
+		try{
+			StandardDateFormatter.parse(inputString);
+		} catch(IllegalArgumentException illegalEx) {
+			isValid=false;
+		}
+		return isValid;
+	}
+	
+	public static boolean isTimeStampValid(String inputString) {
+		SimpleDateFormat format = new java.text.SimpleDateFormat(
+				"yyyy-MM-dd HH:mm:ss.SSSSSS");
+		try {
+			format.parse(inputString);
+			return true;
+		} catch (ParseException e) {
+			return false;
+		}
+	}
 
 	public static void main(String[] args) {
 		DateFormat utcDateDf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");

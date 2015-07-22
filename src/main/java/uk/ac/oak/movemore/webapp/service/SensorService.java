@@ -49,7 +49,7 @@ public interface SensorService {
 	@ApiOperation(value = "delete sensor", notes = "delete sensor by sensor (system) id")
 	@RequestMapping(method = RequestMethod.GET)
 	@DELETE
-	@CrossOriginResourceSharing(allowAllOrigins = true)
+	@CrossOriginResourceSharing(allowAllOrigins = false)
 	@Path("/{sensorId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	JSONResponse removeSensor(
@@ -58,15 +58,15 @@ public interface SensorService {
 	@ApiOperation(value = "Get sensor", notes = "Returns sensor with given sensor id")
 	@RequestMapping(method = RequestMethod.GET)
 	@GET
-	@CrossOriginResourceSharing(allowAllOrigins = true)
+	@CrossOriginResourceSharing(allowAllOrigins = false)
 	@Path("/{sensorId}")
 	Response getSensor(
 			@ApiParam(value = "Physical ID of sensor", allowableValues = "range[1,20]", required = true) @PathParam("sensorId") String sensorId);
 
-	@ApiOperation(value = "Count sensors by type", notes = "Returns sensor type (\"sensorType\"), num of sensors (\"count\") and the sensor type name (\"typeName\").")
+	/*@ApiOperation(value = "Count sensors by type", notes = "Returns sensor type (\"sensorType\"), num of sensors (\"count\") and the sensor type name (\"typeName\").")
 	@RequestMapping(method = RequestMethod.GET)
 	@GET
-	@CrossOriginResourceSharing(allowAllOrigins = true)
-	@Path("/countSensorsByType")
+	@CrossOriginResourceSharing(allowAllOrigins = false)
+	@Path("/countSensorsByType")*/
 	Response countSensorsByType();
 }

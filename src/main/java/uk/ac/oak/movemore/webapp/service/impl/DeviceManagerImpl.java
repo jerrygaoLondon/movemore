@@ -24,10 +24,7 @@ import uk.ac.oak.movemore.webapp.service.DeviceManager;
 import uk.ac.oak.movemore.webapp.service.DeviceService;
 import uk.ac.oak.movemore.webapp.service.SensorManager;
 import uk.ac.oak.movemore.webapp.service.response.JSONResponse;
-import uk.ac.oak.movemore.webapp.service.response.DeviceServiceSuccess;
 import uk.ac.oak.movemore.webapp.service.response.ServiceResponseFailure;
-import uk.ac.oak.movemore.webapp.util.SensorTypeClassifer;
-import uk.ac.oak.movemore.webapp.util.SensorTypeEnum;
 import uk.ac.oak.movemore.webapp.vo.DeviceVO;
 import uk.ac.oak.movemore.webapp.vo.SensorVO;
 
@@ -43,44 +40,26 @@ public class DeviceManagerImpl extends GenericManagerImpl<Device, Long>
 	private SensorManager sensorManager;
 	
 	@Override
-	public JSONResponse updateDeviceLocation(String deviceId, Float latitude,
-			Float longitude) {
-		JSONResponse deviceResp;
+	public Response updateDeviceLocation(String deviceId, Double latitude,
+			Double longitude) {
+		//JSONResponse deviceResp;
 		
 		if (StringUtils.isEmpty(deviceId)) {
-			deviceResp = new ServiceResponseFailure();
-			deviceResp.setIsSuccess(-1);
-			((ServiceResponseFailure)deviceResp).setMessage("Please provide valid deviceId.");
-			((ServiceResponseFailure)deviceResp).setReason("'{deviceId}' IS EMPTY");
-			log.warn("Please provide valid sensor. current {deviceId} is empty.");
-			return deviceResp;
+			return badRequest("Please provide valid device. {Device id} IS EMPTY.");			
 		}
 		
 		if(latitude!=null && latitude.floatValue() == 0.0f) {
-			deviceResp = new ServiceResponseFailure();
-			deviceResp.setIsSuccess(-1);
-			((ServiceResponseFailure)deviceResp).setMessage("Please provide valid latitude.");
-			((ServiceResponseFailure)deviceResp).setReason("'{latitude}' IS INVALID");
-			log.warn("Please provide valid latitude value. current {latitude} is "+latitude+".");
-			return deviceResp;
+			return badRequest("Please provide valid latitude. {latitude} IS INVALID.");
 		}
 		
 		if(longitude!=null && longitude.floatValue() == 0.0f) {
-			deviceResp = new ServiceResponseFailure();
-			deviceResp.setIsSuccess(-1);
-			((ServiceResponseFailure)deviceResp).setMessage("Please provide valid longtitude.");
-			((ServiceResponseFailure)deviceResp).setReason("'{longtitude}' IS INVALID");
-			log.warn("Please provide valid longtitude value. current {longtitude} is "+longitude+".");
-			return deviceResp;
+			return badRequest("Please provide valid longtitude. {longtitude} IS INVALID.");
 		}
-		
+		JSONObject resp = new JSONObject();
 		try {
 			if(!deviceDao.exists(Long.valueOf(deviceId))) {
-				deviceResp = new ServiceResponseFailure();
-				deviceResp.setIsSuccess(-2);
-				((ServiceResponseFailure)deviceResp).setMessage("Device not found. Please provide valid device system id or register device first.");
-				((ServiceResponseFailure)deviceResp).setReason("Device not found.");
 				log.warn("Please provide valid device system id. Current deviceId {"+deviceId+"} has not been registered in system.");
+				return badRequest("Device not found. Please provide valid device system id or register device first.");
 			}
 			
 			Device device = deviceDao.get(Long.valueOf(deviceId));
@@ -89,75 +68,50 @@ public class DeviceManagerImpl extends GenericManagerImpl<Device, Long>
 			device.setUpdated(new Date());
 			deviceDao.save(device);
 			
-			deviceResp = new DeviceServiceSuccess();			
-			deviceResp.setIsSuccess(1);
-			((DeviceServiceSuccess)deviceResp).setDeviceId(String.valueOf(device.getDeviceId()));
-			return deviceResp;
+			resp.put("deviceId", String.valueOf(device.getDeviceId()));
 		} catch (Exception ex) {
-			deviceResp = generalServiceFailureResp(ex);
+			log.error(ex);
+			return Response.status(Status.EXPECTATION_FAILED.getStatusCode()).entity(ex.toString()).build();
 		}
 		
-		return deviceResp;
+		
+		return Response.status(Status.OK.getStatusCode()).entity(resp.toString()).build();
 	}
 
 	@Override
-	public JSONResponse registerNewDevice(String devicePhysicalId,
-			Float latitude, Float longitude, String deviceName) {
+	public Response registerNewDevice(String devicePhysicalId,
+			Double latitude, Double longitude, String deviceName) {
 		log.info("register a new device");
 		log.info("devicePhysicalId:"+devicePhysicalId);
 		log.info("latitude:"+devicePhysicalId);
 		log.info("longtitude:"+devicePhysicalId);
 		log.info("deviceName:"+deviceName);
 		
-		JSONResponse deviceResp;
-		
 		if (StringUtils.isEmpty(devicePhysicalId)) {
-			deviceResp = new ServiceResponseFailure();
-			deviceResp.setIsSuccess(-1);
-			((ServiceResponseFailure)deviceResp).setMessage("Please provide valid device physical id.");
-			((ServiceResponseFailure)deviceResp).setReason("'{devicePhysicalId}' IS EMPTY");
-			log.warn("Please provide valid device physical id. current {devicePhysicalId} is empty.");
-			return deviceResp;
+			return badRequest("Please provide valid device physical id. current {devicePhysicalId} is empty.");
 		}
 		
 		if (StringUtils.isEmpty(deviceName)) {
-			deviceResp = new ServiceResponseFailure();
-			deviceResp.setIsSuccess(-1);
-			((ServiceResponseFailure)deviceResp).setMessage("Please provide valid device name.");
-			((ServiceResponseFailure)deviceResp).setReason("'{deviceName}' IS EMPTY");
-			log.warn("Please provide valid device name. current {deviceName} is empty.");
-			return deviceResp;
+			return badRequest("Please provide valid device name.. current {deviceName} is empty.");
 		}
 		
 		
 		if(latitude!=null && latitude.floatValue() == 0.0f) {
-			deviceResp = new ServiceResponseFailure();
-			deviceResp.setIsSuccess(-1);
-			((ServiceResponseFailure)deviceResp).setMessage("Please provide valid latitude.");
-			((ServiceResponseFailure)deviceResp).setReason("'{latitude}' IS INVALID");
-			log.warn("Please provide valid latitude value. current {latitude} is "+latitude+".");
-			return deviceResp;
+			return badRequest("Please provide valid latitude. current {latitude} is empty.");
 		}
 		
 		if(longitude!=null && longitude.floatValue() == 0.0f) {
-			deviceResp = new ServiceResponseFailure();
-			deviceResp.setIsSuccess(-1);
-			((ServiceResponseFailure)deviceResp).setMessage("Please provide valid longitude.");
-			((ServiceResponseFailure)deviceResp).setReason("'{longitude}' IS INVALID");
-			log.warn("Please provide valid longtitude value. current {longitude} is "+longitude+".");
-			return deviceResp;
+			return badRequest("Please provide valid longitude. current {longitude} is empty.");
 		}
 		
 		boolean isExist = deviceDao.isDevicePhysicalIdExist(devicePhysicalId);
 		if(isExist) {
-			deviceResp = new ServiceResponseFailure();
-			deviceResp.setIsSuccess(-2);
-			((ServiceResponseFailure)deviceResp).setMessage("The device '"+devicePhysicalId+"' has been registered.");
-			((ServiceResponseFailure)deviceResp).setReason("'{devicePhysicalId}' is registered.");
-			log.warn("The device '"+devicePhysicalId+"' has been registered.");
-			return deviceResp;
+			String msg="The device '"+devicePhysicalId+"' is conflicted with existing one registered already.";
+			log.warn(msg);
+			
+			return Response.status(Status.CONFLICT.getStatusCode()).entity(msg).build();
 		}
-		
+		JSONObject resp = new JSONObject();
 		try{
 			Device newDevice = new Device(devicePhysicalId, deviceName, deviceName);
 			newDevice.setLatitude(latitude);
@@ -165,14 +119,12 @@ public class DeviceManagerImpl extends GenericManagerImpl<Device, Long>
 			
 			newDevice = deviceDao.save(newDevice);
 			
-			deviceResp = new DeviceServiceSuccess();	
-			deviceResp.setIsSuccess(1);
-			((DeviceServiceSuccess)deviceResp).setDeviceId(newDevice.getDeviceId().toString());
-		
+			resp.put("deviceId", String.valueOf(newDevice.getDeviceId()));
 		} catch (Exception ex) {
-			deviceResp = generalServiceFailureResp(ex);
+			log.error(ex);
+			return Response.status(Status.EXPECTATION_FAILED.getStatusCode()).entity(ex.toString()).build();
 		}
-		return deviceResp;
+		return Response.status(Status.OK.getStatusCode()).entity(resp.toString()).build();
 	}
 	
 	@Override
@@ -187,10 +139,10 @@ public class DeviceManagerImpl extends GenericManagerImpl<Device, Long>
 					device.setName(deviceName);
 				}
 				if (latitude != null) {
-					device.setLatitude(latitude.floatValue());
+					device.setLatitude(latitude);
 				}
 				if (longitude != null) {
-					device.setLongitude(longitude.floatValue());
+					device.setLongitude(longitude);
 				}
 				
 				if (batteryLevel != null) {
@@ -206,10 +158,10 @@ public class DeviceManagerImpl extends GenericManagerImpl<Device, Long>
 		
 		device = new Device(devicePhysicalId, deviceName, deviceName);
 		if (latitude != null) {
-			device.setLatitude(latitude.floatValue());
+			device.setLatitude(latitude);
 		}
 		if (longitude != null) {
-			device.setLongitude(longitude.floatValue());
+			device.setLongitude(longitude);
 		}
 		if (batteryLevel != null) {
 			device.setBatteryLevel(batteryLevel);
@@ -218,8 +170,6 @@ public class DeviceManagerImpl extends GenericManagerImpl<Device, Long>
 		
 		return device;		
 	}
-	
-	
 
 	private JSONResponse generalServiceFailureResp(Exception ex) {
 		JSONResponse deviceResp;
@@ -278,11 +228,11 @@ public class DeviceManagerImpl extends GenericManagerImpl<Device, Long>
 	}
 	
 	@Override
-	public JSONResponse registerOrUpdateDeviceInfo(String devicePhysicalId,
+	public Response registerOrUpdateDeviceInfo(String devicePhysicalId,
 			String deviceName, String sensorPhysicalId, String sensorName,
 			Double latitude, Double longitude, Float batteryLevel, String sensorDescription, String sensorType) {
 		log.info(String
-				.format("register or update device information: device id is %s, device name is %s, sensor id is %s, sensor name is %s, lat %s, lon %s, battery leve is %s, sensor description is %s, sensorType is %s",
+				.format("register or update device information. Processing data received from sensor: device id is %s, device name is %s, sensor id is %s, sensor name is %s, lat %s, lon %s, battery leve is %s, sensor description is %s",
 						devicePhysicalId,
 						deviceName,
 						sensorPhysicalId,
@@ -292,59 +242,27 @@ public class DeviceManagerImpl extends GenericManagerImpl<Device, Long>
 						batteryLevel,
 						sensorDescription,
 						sensorType));
-		JSONResponse deviceResp;
 
 		if (StringUtils.isEmpty(devicePhysicalId)) {
-			deviceResp = new ServiceResponseFailure();
-			deviceResp.setIsSuccess(-1);
-			((ServiceResponseFailure) deviceResp)
-					.setMessage("Please provide valid device.");
-			((ServiceResponseFailure) deviceResp)
-					.setReason("'{deviceId}' IS EMPTY");
-			log.warn(((ServiceResponseFailure) deviceResp).getReason());
-			return deviceResp;
+			return badRequest("Please provide valid device. {Device physical id} IS EMPTY.");
 		}
 
 		if (StringUtils.isEmpty(sensorPhysicalId)) {
-			deviceResp = new ServiceResponseFailure();
-			deviceResp.setIsSuccess(-1);
-			((ServiceResponseFailure) deviceResp)
-					.setMessage("Please provide valid sensor.");
-			((ServiceResponseFailure) deviceResp)
-					.setReason("'{sensorId}' IS EMPTY");
-			log.warn(((ServiceResponseFailure) deviceResp).getReason());
-			return deviceResp;
+			return badRequest("Please provide valid sensor. {Sensor physical id} IS EMPTY.");
 		}
-		
-//		if (latitude == null) {
-//			deviceResp = new ServiceResponseFailure();
-//			deviceResp.setIsSuccess(-1);
-//			((ServiceResponseFailure)deviceResp).setMessage("Please provide valid latitude.");
-//			((ServiceResponseFailure)deviceResp).setReason("'{latitude}' IS INVALID");
-//			log.warn("Please provide valid latitude value. current {latitude} is "+latitude+".");
-//			return deviceResp;
-//		}
-//		
-//		if (longitude == null) {
-//			deviceResp = new ServiceResponseFailure();
-//			deviceResp.setIsSuccess(-1);
-//			((ServiceResponseFailure)deviceResp).setMessage("Please provide valid longitude.");
-//			((ServiceResponseFailure)deviceResp).setReason("'{longitude}' IS INVALID");
-//			log.warn("Please provide valid longtitude value. current {longitude} is "+longitude+".");
-//			return deviceResp;
-//		}
-
+		JSONObject sensorResult = new JSONObject();
 		try {
 			Device device = addOrUpdateDevice(devicePhysicalId, deviceName, latitude, longitude, batteryLevel);
 	
-			sensorManager.addOrUpdateSensor(device, sensorPhysicalId, sensorName, sensorDescription, sensorType);
+			Sensors sensor=sensorManager.addOrUpdateSensor(device, sensorPhysicalId, sensorName, sensorDescription, sensorType);
 			
-			deviceResp = new DeviceServiceSuccess();	
-			deviceResp.setIsSuccess(1);
+			sensorResult.put("sensorId", sensor.getSensorId());
+			
 		} catch (Exception ex) {
-			deviceResp = generalServiceFailureResp(ex);
+			log.error(ex);
+			return Response.status(Status.EXPECTATION_FAILED.getStatusCode()).entity(ex.toString()).build();
 		}
-		return deviceResp;
+		return Response.status(Status.OK.getStatusCode()).entity(sensorResult.toString()).build();
 	}
 
 	

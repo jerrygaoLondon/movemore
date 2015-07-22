@@ -50,7 +50,7 @@ public interface SensorObservationService {
 	@ApiOperation(value = "get an observation", notes = "get observations by observation id", response = JSONResponse.class)
 	@RequestMapping(method = RequestMethod.GET)
 	@GET
-	@CrossOriginResourceSharing(allowAllOrigins = true)
+	@CrossOriginResourceSharing(allowAllOrigins = false)
 	@Path("/pull/{obsvId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public JSONResponse getSensorObservationById(
@@ -59,7 +59,7 @@ public interface SensorObservationService {
 	@ApiOperation(value = "get all observations of a sensor", notes = "get observations by sensor (system) id")
 	@RequestMapping(method = RequestMethod.GET)
 	@GET
-	@CrossOriginResourceSharing(allowAllOrigins = true)
+	@CrossOriginResourceSharing(allowAllOrigins = false)
 	@Path("/{sensorId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getSensorObservationBySensorId(
@@ -74,7 +74,7 @@ public interface SensorObservationService {
 	@ApiOperation(value = "post sensor observations", notes = "post all the observations (one time) by sensor physical id. Sensor Physical id is the URI generated in sensor system and should be pre-registered in the system. The observation time should be in the format of 'yyyy-MM-dd HH:mm:ss.SSSSSS'. Return: 400 - Bad Request due to unacceptable request parameters; 404 - Sensor Not Found; 200 - success submit.")
 	@RequestMapping(method = RequestMethod.POST)
 	@POST
-	@CrossOriginResourceSharing(allowAllOrigins = true)
+	@CrossOriginResourceSharing(allowAllOrigins = false)
 	@Consumes({"application/x-www-form-urlencoded"})
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response saveObservation(
@@ -99,16 +99,16 @@ public interface SensorObservationService {
 	@ApiOperation(value = "Delete a sensor observation", notes = "delete one observation/measurement record by ID")
 	@RequestMapping(method = RequestMethod.DELETE)
 	@DELETE
-	@CrossOriginResourceSharing(allowAllOrigins = true)
+	@CrossOriginResourceSharing(allowAllOrigins = false)
 	@Path("/{obsvId}")
 	public Response deleteObservation(
 			@ApiParam(value = "System ID of observation/measurement", allowableValues = "range[1,20]", required = true) @PathParam("obsvId") String observationId);
 
-	@ApiOperation(value = "Counts devices detected by a given sensor", notes = "Aggregate observation results (i.e.,detected encrypted device macAddress or car registration plate no) by observation time within a time range. The result is JSON Object containing JSON Array result like {\"results\" : [{\"time\": {\"type\": \"string\", \"count\": {\"type\" : \"int64\"}}]} ")
+	/*@ApiOperation(value = "Counts devices detected by a given sensor", notes = "Aggregate observation results (i.e.,detected encrypted device macAddress or car registration plate no) by observation time within a time range. The result is JSON Object containing JSON Array result like {\"results\" : [{\"time\": {\"type\": \"string\", \"count\": {\"type\" : \"int64\"}}]} ")
 	@RequestMapping(method = RequestMethod.GET)
 	@GET
-	@CrossOriginResourceSharing(allowAllOrigins = true)
-	@Path("/{sensorId}/counts")
+	@CrossOriginResourceSharing(allowAllOrigins = false)
+	@Path("/{sensorId}/counts")*/
 	public Response aggregateObservations(
 			@ApiParam(value = "Physical ID of sensor", allowableValues = "range[1,20]", required = true) @PathParam("sensorId") String sensorId,
 			@ApiParam(value = "startDate in ISO 8601 format, for example: 2014-01-01T12:00:00+00:00", allowableValues = "range[1,20]", required = false) @QueryParam("startDate") String startDate,
@@ -122,39 +122,39 @@ public interface SensorObservationService {
 //	public Response correctObservationTime(
 //			@ApiParam(value = "Physical ID of sensor", allowableValues = "range[1,20]", required = true) @PathParam("sensorId") String sensorId);
 	
-	@ApiOperation(value = "Classify sensor readings from the observations big table to the optimised specific table", notes = "The operation serves as a data migration tool for sensor observation data.")
+	/*@ApiOperation(value = "Classify sensor readings from the observations big table to the optimised specific table", notes = "The operation serves as a data migration tool for sensor observation data.")
 	@RequestMapping(method = RequestMethod.GET)
 	@GET
-	@CrossOriginResourceSharing(allowAllOrigins = true)
-	@Path("/{sensorId}/classify")
+	@CrossOriginResourceSharing(allowAllOrigins = false)
+	@Path("/{sensorId}/classify")*/
 	public Response classifyObservations(
 			@ApiParam(value = "System ID of sensor", allowableValues = "range[1,20]", required = true) @PathParam("sensorId") String sensorId);
 
-	@ApiOperation(value = "Query realtime data stream", notes = "The operation will query data input stream with default limit 20. The query will return data creation time, observation id, sensor reading, and sensor name.")
+	/*@ApiOperation(value = "Query realtime data stream", notes = "The operation will query data input stream with default limit 20. The query will return data creation time, observation id, sensor reading, and sensor name.")
 	@RequestMapping(method = RequestMethod.GET)
 	@GET
 	@CrossOriginResourceSharing(allowAllOrigins = true)
-	@Path("/query/realtimeDataStream")
+	@Path("/query/realtimeDataStream")*/
 	public Response queryRealtimeDataStream(@QueryParam("limit") Integer limit);
 	
-	@ApiOperation(value = "Counts sensor readings by sub-categories (e.g., activity types for activity sensors)", notes = "Aggregate observation results by sub-categories and observation time within a time range. The result is JSON Object containing JSON Array result like {\"results\" : [{\"type\": \"string\", \"count\": {\"type\" : \"int64\"}]} ")
+	/*@ApiOperation(value = "Counts sensor readings by sub-categories (e.g., activity types for activity sensors)", notes = "Aggregate observation results by sub-categories and observation time within a time range. The result is JSON Object containing JSON Array result like {\"results\" : [{\"type\": \"string\", \"count\": {\"type\" : \"int64\"}]} ")
 	@RequestMapping(method = RequestMethod.GET)
 	@GET
 	@CrossOriginResourceSharing(allowAllOrigins = true)
-	@Path("/{sensorId}/counts/datatype")
+	@Path("/{sensorId}/counts/datatype")*/
 	public Response countSensorObsvSubCategories(
 			@ApiParam(value = "Physical ID of sensor", allowableValues = "range[1,20]", required = true) @PathParam("sensorId") String sensorId,
 			@ApiParam(value = "startDate in ISO 8601 format, for example: 2014-01-01T12:00:00+00:00", allowableValues = "range[1,20]", required = false) @QueryParam("startDate") String startDate,
 			@ApiParam(value = "endDate in ISO 8601 format, for example: 2014-01-01T12:00:00+00:00", allowableValues = "range[1,20]", required = false) @QueryParam("endDate") String endDate);
 
-	@ApiOperation(value = "Sensor Data Bulk Upload", notes = "CTX/GPX training activity data bulk uploading")
+	/*@ApiOperation(value = "Sensor Data Bulk Upload", notes = "CTX/GPX training activity data bulk uploading")
 	@RequestMapping(method = RequestMethod.POST)
 	@POST
 	@CrossOriginResourceSharing(allowAllOrigins = true)
 	@Consumes("multipart/form-data")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/bulkUploadGPSData")
-	@WebMethod(operationName = "sensorDataBulkUpload")
+	@WebMethod(operationName = "sensorDataBulkUpload")*/
 	Response sensorDataBulkUpLoad(
 			@ApiParam(value = "Physical sensor Id that associates with a registered sensor for which the sensor observations to be posted", allowableValues = "range[1,30]", required = true) @Multipart("sensorId") String sensorPhysicalId,
 			@ApiParam(value = "TCX/GPX Activity tracking data file to be submit", allowableValues = "range[1,255]", required = false) @Multipart(value = "trackingDataFile") InputStream fileInputSteam,
@@ -163,16 +163,16 @@ public interface SensorObservationService {
 	@ApiOperation(value = "Delete all the observations", notes = "delete all the observation/measurement records of a given sensor physical id")
 	@RequestMapping(method = RequestMethod.DELETE)
 	@DELETE
-	@CrossOriginResourceSharing(allowAllOrigins = true)
+	@CrossOriginResourceSharing(allowAllOrigins = false)
 	@Path("/removeAll/{sensorId}")
 	public Response deleteAllObservations(
 			@ApiParam(value = "Sensor Physical ID", allowableValues = "range[1,20]", required = true) @PathParam("sensorId") String sensorId);
 
-	@ApiOperation(value = "noramlise observation data", notes = "It currently supports update normalised activity data including activity type, latitude, longitude and confidence.")
+	/*@ApiOperation(value = "noramlise observation data", notes = "It currently supports update normalised activity data including activity type, latitude, longitude and confidence.")
 	@RequestMapping(method = RequestMethod.POST)
 	@POST
 	@CrossOriginResourceSharing(allowAllOrigins = true)
-	@Path("/normalise/{obsvId}")
+	@Path("/normalise/{obsvId}")*/
 	public Response normaliseObservation(
 			@ApiParam(value = "Observation id", allowableValues = "range[1,30]", required = true) @PathParam("obsvId") Long obsvId,
 			@ApiParam(value = "Final (normalised) Activity Type", allowableValues = "range[1,30]", required = false) @FormParam("finalActivityType") String finalActivityType,
