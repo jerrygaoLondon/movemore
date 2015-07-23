@@ -14,6 +14,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.EntityBuilder;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
@@ -40,6 +41,8 @@ import org.json.JSONObject;
  * <dependency> <groupId>org.json</groupId> <artifactId>json</artifactId>
  * <version>20140107</version> </dependency>
  * 
+ * Refer to http://snippet-pocket.blogspot.in/2010/07/ssl-authentication-with-apache.html for how to set up SSL for request.
+ * 
  * @author jieg
  * 
  */
@@ -56,7 +59,16 @@ public class TestSensorObservationRESTServiceEx {
 	 *            point of sensor registration.
 	 */
 	public static void main(String[] args) {
-		HttpClient client = HttpClientBuilder.create().build();
+		for (int i=0; i<15000; i++) {
+			testActivitySensorGZippedDataSubmit();
+		}
+	}
+
+	public static void testActivitySensorGZippedDataSubmit() {
+		//HttpClient client = HttpClientBuilder.create().build();		
+		RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(3000*1000).build();
+		HttpClient client = HttpClientBuilder.create().setDefaultRequestConfig(requestConfig).build();
+		
 		URI restURL;
 		try {
 			// remote service URI is
@@ -66,6 +78,8 @@ public class TestSensorObservationRESTServiceEx {
 			// HttpPost postRequest = constructActivitySensorParameter(restURL);
 			HttpPost postRequest = constructActivitySensorGZIPRequest(restURL);
 			
+			// Create container for various parameters, e.g. timeouts
+			  
 			// submit post request and return the response synchronously
 			HttpResponse resp = client.execute(postRequest);
 			if (resp.getStatusLine().getStatusCode() == 200) {
