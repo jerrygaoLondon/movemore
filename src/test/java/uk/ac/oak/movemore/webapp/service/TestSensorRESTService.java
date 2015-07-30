@@ -13,6 +13,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -42,8 +43,43 @@ import org.json.JSONObject;
 public class TestSensorRESTService {
 
 	public static void main(String[] args) {
-		testAddNewSensor();
-		testRemoveSensor();
+		//testAddNewSensor();
+		//testRemoveSensor();
+		testGetSensor();
+	}
+	
+	private static void testGetSensor() {
+		HttpClient client = HttpClientBuilder.create().build();
+		URI restURL;
+		
+		try {
+			restURL = new URIBuilder().setScheme("https")
+			        .setHost("wesenseit-vm1.shef.ac.uk:8443")
+			        .setPath("/moveMore/services/json/sensor")
+			        .build();
+			
+			HttpGet getRequest = new HttpGet(restURL);
+			//submit http get request and return the response synchronously
+			HttpResponse resp = client.execute(getRequest);
+			int statusCode = resp.getStatusLine().getStatusCode();
+			if (statusCode == 200) {
+				System.out.println("Success!Currently registered sensors:");
+				HttpEntity entity = resp.getEntity();
+				String respbody = EntityUtils.toString(entity);
+				JSONObject sensors = new JSONObject(respbody);
+				JSONArray sensorArray = sensors.getJSONArray("sensors");
+				System.out.println(sensorArray.toString());
+			}else{
+				System.err.println("Request Failure ! Status code is :"+statusCode);				
+			}
+				
+		} catch (URISyntaxException e1) {
+			e1.printStackTrace();
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**

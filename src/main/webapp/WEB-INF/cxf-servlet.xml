@@ -27,7 +27,7 @@
     	<property name="resourcePackage" value="uk.ac.oak.movemore.webapp.service"/>
     	<property name="version" value="1.0.0"/>
     	<!-- change to the server host name -->
-    	<property name="basePath" value="https://wesenseit-vm1.shef.ac.uk:8443/movemore/services/json"/>    	
+    	<property name="basePath" value="https://wesenseit-vm1.shef.ac.uk:8443/moveMore/services/json"/>    	
     	<property name="title" value="Sensor Web REST APIs"/>
     	<property name="description" value="This page presents a list of sensor web project RESTFul apis."/>
     	<property name="contact" value="j.gao@sheffield.ac.uk"/>
