@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -532,6 +533,22 @@ public class SensorObservationManagerImpl extends
 		}
 
 		return Response.status(Status.OK).build();
+	}
+
+	
+	
+	
+	@Override
+	@Transactional
+	public Response saveIOSObservation(byte[] data) {
+		log.info("Processing GZIPStream from bytes data....");
+		try {
+			String s = new String(data, "utf-8");
+			System.out.println("testing data converted from byes:"+s);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return Response.status(Status.OK.getStatusCode()).build();
 	}
 
 	@Override

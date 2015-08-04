@@ -199,7 +199,7 @@ public class Sensors extends BaseObject implements Serializable {
 		this.version = version;
 	}
 	
-	@Column(name = "sensor_physical_id", length=100)
+	@Column(name = "sensor_physical_id", length=300)
 	public String getSensorPhysicalId() {
 		return sensorPhysicalId;
 	}

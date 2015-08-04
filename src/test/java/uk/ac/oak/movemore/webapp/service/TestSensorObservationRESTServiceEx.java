@@ -1,11 +1,19 @@
 package uk.ac.oak.movemore.webapp.service;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.GZIPOutputStream;
 
 import javax.ws.rs.core.Response.Status;
 
@@ -59,11 +67,13 @@ public class TestSensorObservationRESTServiceEx {
 	 *            point of sensor registration.
 	 */
 	public static void main(String[] args) {
-		for (int i=0; i<15000; i++) {
+		for (int i=0; i<1; i++) {
 			testActivitySensorGZippedDataSubmit();
 		}
 	}
 
+
+	
 	public static void testActivitySensorGZippedDataSubmit() {
 		//HttpClient client = HttpClientBuilder.create().build();		
 		RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(3000*1000).build();
@@ -123,7 +133,7 @@ public class TestSensorObservationRESTServiceEx {
 		}
 	}
 	
-	private static HttpPost constructActivitySensorGZIPRequest(URI restURL) {
+	private static HttpPost constructActivitySensorGZIPRequest(URI restURL) throws UnsupportedEncodingException, IOException {
 		//String obsv_value="{\"data\":[{\"stepsDoneToday\":187,\"activityDescription\":{\"type\":3,\"duration\":43141,\"time\":\"2015-07-21T12:00:00+00:00\",\"confidence\":0},\"floorClimbed\":0,\"activityLocation\":{\"accuracy\":31.5,\"longitude\":-1.4804662466049194,\"latitude\":-1.4804662466049194}},{\"stepsDoneToday\":188,\"activityDescription\":{\"type\":5,\"duration\":39838,\"time\":\"2015-07-21T12:00:00+00:00\",\"confidence\":0},\"floorClimbed\":0,\"activityLocation\":{\"accuracy\":31.5,\"longitude\":0,\"latitude\":0}}],\"sensorId\":\"8944200012885048334-MoveMore\"}";
 		String obsv_value1="{\"stepsDoneToday\":187,\"activityDescription\":{\"type\":3,\"duration\":43141,\"time\":\"2015-07-21T12:00:00+00:00\",\"confidence\":0},\"floorClimbed\":0,\"activityLocation\":{\"accuracy\":31.5,\"longitude\":-1.4804662466049194,\"latitude\":-1.4804662466049194}}";
 		String obsv_value2="{\"stepsDoneToday\":188,\"activityDescription\":{\"type\":5,\"duration\":39838,\"time\":\"2015-07-21T12:00:00+00:00\",\"confidence\":0},\"floorClimbed\":0,\"activityLocation\":{\"accuracy\":31.5,\"longitude\":-1.4804662466049194,\"latitude\":-1.4804662466049194}}";
@@ -142,10 +152,27 @@ public class TestSensorObservationRESTServiceEx {
 		
 //		JSONObject jsonObj = new JSONObject(value);
 		
-		HttpEntity entity = EntityBuilder.create().setText(sensorData.toString()).gzipCompress()
+/*		HttpEntity entity = EntityBuilder.create().setText(sensorData.toString()).gzipCompress()
+				.build();*/
+		HttpEntity entity = EntityBuilder.create().setBinary(sensorData.toString().getBytes()).gzipCompress()
 				.build();
-//		HttpEntity entity = EntityBuilder.create().setBinary(value.getBytes()).gzipCompress()
-//				.build();
+		
+		FileOutputStream output = null;
+		GZIPOutputStream gzipOutput=null;
+		try {
+			output = new FileOutputStream("356194054489613-sensor-data.gzip");
+			gzipOutput = new GZIPOutputStream(output);
+			gzipOutput.write(sensorData.toString().getBytes());
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			gzipOutput.flush();
+			gzipOutput.finish();
+		    output.close();
+		  }
+	              
 		postRequest.setEntity(entity);
 		return postRequest;
 	}

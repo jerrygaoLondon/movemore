@@ -186,4 +186,12 @@ public interface SensorObservationService {
 	@CrossOriginResourceSharing(allowAllOrigins = true)
 	@WebMethod(operationName = "saveObservationsWithinGZIP")
 	public Response saveObservation(String json);
+	
+	@ApiOperation(value = "Test IOS Push sensor observations within compressed gzip", notes = "All the consumable data will be constructed in a json text/format: {\"data\": [{...}, {...}], \"sensorId\": \"XXXX\"} and compressed in gzip")
+	@RequestMapping(method = RequestMethod.POST)
+	@POST
+	@CrossOriginResourceSharing(allowAllOrigins = true)
+	@Path("/iosData")
+	@WebMethod(operationName = "saveObservationsWithinIOSGZIP")
+	public Response saveIOSObservation(byte[] data);
 }

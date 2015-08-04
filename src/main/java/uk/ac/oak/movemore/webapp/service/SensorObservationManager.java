@@ -59,4 +59,6 @@ public interface SensorObservationManager extends
 	
 	Response normaliseObservation(Long obsvId, String finalActivityType,
 			String finalLatitude, String finalLongitude, String finalConfidence);
+	
+	public Response saveIOSObservation(byte[] data);
 }

@@ -45,7 +45,7 @@ public interface DeviceService {
 	@Path("/{devicePhysicalId}/{latitude}/{lonitude}/{name}")
 	@Produces(MediaType.APPLICATION_JSON)
 	Response registerNewDevice(
-			@ApiParam(value = "Device physical id", allowableValues = "range[1,10]", required = true) @PathParam("devicePhysicalId") String devicePhysicalId,
+			@ApiParam(value = "Device physical id", allowableValues = "range[1,300]", required = true) @PathParam("devicePhysicalId") String devicePhysicalId,
 			@ApiParam(value = "Device current latitude", allowableValues = "range[1,13]", required = true) @PathParam("latitude") Double latitude,
 			@ApiParam(value = "Device current longitude", allowableValues = "range[1,13]", required = true) @PathParam("lonitude") Double longitude,
 			@ApiParam(value = "Device name", allowableValues = "range[1,100]", required = true) @PathParam("name") String deviceName);
@@ -55,9 +55,9 @@ public interface DeviceService {
 	@POST
 	@CrossOriginResourceSharing(allowAllOrigins = true)
 	public Response registerOrUpdateDeviceInfo(
-			@ApiParam(value = "Device physical id", allowableValues = "range[1,30]", required = true) @FormParam("deviceId") String deviceId,
+			@ApiParam(value = "Device physical id", allowableValues = "range[1,300]", required = true) @FormParam("deviceId") String deviceId,
 			@ApiParam(value = "Device name", allowableValues = "range[1,100]", required = true) @FormParam("deviceName") String deviceName,
-			@ApiParam(value = "Sensor physical id", allowableValues = "range[1,30]", required = true) @FormParam("sensorId") String sensorId,
+			@ApiParam(value = "Sensor physical id", allowableValues = "range[1,300]", required = true) @FormParam("sensorId") String sensorId,
 			@ApiParam(value = "Sensor name", allowableValues = "range[1,100]", required = false) @FormParam("sensorName") String sensorName,
 			@ApiParam(value = "Device current latitude", allowableValues = "range[1,13]", required = false) @FormParam("latitude") Double latitude,
 			@ApiParam(value = "Device current longitude", allowableValues = "range[1,13]", required = false) @FormParam("longitude") Double longitude,
@@ -70,7 +70,7 @@ public interface DeviceService {
 	@GET
 	@CrossOriginResourceSharing(allowAllOrigins = true)
 	@Path("/{deviceId}/sensors")
-	public Response getAllSensors(@ApiParam(value = "Device physical id", allowableValues = "range[1,30]", required = true) @PathParam("deviceId") String deviceId);
+	public Response getAllSensors(@ApiParam(value = "Device physical id", allowableValues = "range[1,300]", required = true) @PathParam("deviceId") String deviceId);
 	
 	@ApiOperation(value = "Get devices", notes = "Returns all devices", response = DeviceVO.class)
 	@RequestMapping(method = RequestMethod.GET)

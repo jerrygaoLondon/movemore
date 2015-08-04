@@ -190,7 +190,7 @@ public class Device extends BaseObject implements Serializable {
 				+ getLastKnownIP() + "," + getDescription();
 	}
 	
-	@Column(name = "device_physical_id", length=30)
+	@Column(name = "device_physical_id", length=300)
 	public String getDevicePhysicalId() {
 		return devicePhysicalId;
 	}
