@@ -13,6 +13,7 @@ Movemore server supports secure and encrypted access via the Secure Sockets Laye
 	
 When communicating with a server using a self-signed SSL using a Java based client, this custom certificate must be known by the callee side of the communication. This can be done manually by adding the certificate to the client JVM.
 
+
 - 1) Prepare the Certificate Keystore:
 		/usr/bin$ /usr/bin/keytool -genkey -alias tomcat7 -keyalg RSA -keystore /home/ac1jgx/.movemore-sslcert
 			password is movemore
@@ -58,12 +59,19 @@ HTTP Compression
 
 	Accept-encoding: gzip
 	
-Optimisation for large scale
+Optimisation for large scale data processing
 ======================
 Tomcat server
 ----------------
-Currently, tomcat server is configured using NIO (many more connections than threads). maxConnections defaults 10,000 and maxThread is set to 500.
+
+In multi-user, high-concurrency environments it is important to tune Tomcat to use more threads to process HTTP requests. Currently, tomcat server is configured using NIO (many more connections than threads). maxConnections defaults 10,000 and maxThread is set to 500.
 see more details via http://stackoverflow.com/questions/24678661/tomcat-maxthreads-vs-maxconnections and current setting in /etc/tomcat7/server.xml.
+
+"At server startup time, this Connector will create a number of request processing threads (based on the value configured for the minSpareThreads attribute). Each incoming request requires a thread for the duration of that request. If more simultaneous requests are received than can be handled by the currently available request processing threads, additional threads will be created up to the configured maximum (the value of the maxThreads attribute). If still more simultaneous requests are received, they are stacked up inside the server socket created by the Connector, up to the configured maximum (the value of the acceptCount attribute). Any further simultaneous requests will receive "connection refused" errors, until resources are available to process them." More details via tomcat doc https://tomcat.apache.org/tomcat-5.5-doc/config/http.html
+
+A typical configuration could be multiple machines. One which has Apache (load balancer), and N (n>2) machines behind it, each having N instances of Tomcat on it. A multiple CPU machine would be good. Usually the number of threads you can handle is significantly dependent on the speed and number of CPUs you have. Usually, using multiple tomcat instances of tomcat is ideal with each one configuring maxThreads (~500). See How to optimize tomcat performance in production(http://www.genericarticles.com/mediawiki/index.php?title=How_to_optimize_tomcat_performance_in_production#Guidelines_for_maxThreads:) and Tomcat clustering architecture (http://www.datadisk.co.uk/html_docs/java_app/tomcat6/tomcat6_clustering.htm).
+
+To process big data stream, Apache Storm is good choice to provide clustered setup. For high-level introduction of use case, please check http://www.ibm.com/developerworks/library/os-twitterstorm/
 
 
 Mysql database
@@ -74,7 +82,7 @@ Backup the original my.cnf file and replace with the new one:
 	sudo cp /etc/mysql/my.cnf /etc/mysql/my.cnf.backup
 	
 
-Good practice is introduced here (https://www.percona.com/blog/2011/01/07/high-rate-insertion-with-mysql-and-innodb/ and http://dimitrik.free.fr/blog/archives/2010/12/mysql-performance-analyzing-perconas-tpcclike-workload-on-mysql-55.html).
+Good practice is introduced here in Mysql doc (https://dev.mysql.com/doc/refman/5.5/en/too-many-connections.html),  (https://www.percona.com/blog/2011/01/07/high-rate-insertion-with-mysql-and-innodb/ http://dimitrik.free.fr/blog/archives/2010/12/mysql-performance-analyzing-perconas-tpcclike-workload-on-mysql-55.html).
 
 **max_connections**
 

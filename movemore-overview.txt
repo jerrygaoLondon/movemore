@@ -1,0 +1,36 @@
+The key performance metric is essentially how many concurrent requests a server can handle. The point i want to make in the following illustration is that there are the limitations of single server instance solution that we cannot address without a clustering architecture. And with limited time and resource, we can tune the parameters of the server and database and scale up the computational resource so as to handle as much as concurrent requests as we can. 
+
+An optimised mobile client solution to reduce overall traffic between server and client can reduce high loads of the server. Maybe more efficient client/server integration and communication solution btw mobile app and back-end server is needed.
+
+Current implementation of movemore server:
+
+Current server is implemented with typical three-tier JEE architecture built by Spring + Hibernate + Apache CXF. It is enterprise level solution for web app. Hibernate can provide optimistic concurrency control and distributed transaction management with a large transaction volume. Apache CXF provides a more efficient implementation of REST service for handling input stream. Https over SSL protocol is implemented and configured based on Tomcat 7. SSL can help to secure HTTP traffic but will also slow down the server with a tiny bit of overhead compared with unsecured HTTP protocol.
+
+Three table (device, sensors and observations) are specifically used for registering sensors and dumping data to database. As i reused the code and sql scripts from previous server, that is the reason why you can see some old tables automatically created in the DB. I will clean up them this week. But just note that defining few more tables in database won't affect the transaction performance in any way.
+
+Current solution should be robust and flexible for high volume transactions. However, when it comes to very high volume of concurrent data streams with high frequencies, how to develop the server, how to design tables and what database to use (either mysql or mongoDB or whatever mature database) are really minor issues.
+
+Solutions for Apache Tomcat and Mysql and the limitations:
+
+For apache tomcat, we can tune tomcat to use more threads to process HTTP requests in multi-user, high-concurrency environments. The solution is to configure the tomcat server with NIO connector, maxConnections and maxThread. At server startup time, this Connector will create a number of request processing threads in threading pool. The maxConnections are usually 500 - 10,000. Usually the number of threads you can handle is significantly dependent on the speed and number of CPUs you have.  So, we can scale up our server with more CPU and memory. Then, we are able to set the parameter to a higher value (could set to -1 for unlimited connection). I don't have any experience to set the maxConnections in tomcat higher than 10,000.
+
+Trade-off between scalability and stability: If the connection exceeds maximum allowed value, client will receive "HTTP connection time out" error. If we set this value with unlimited value, the server can be down very easily if all the available system resource is consumed.
+
+For Mysql database, my current solution is to increase max_connections and max_user_connections. They are performance parameters to set the maximum number of connections MySQL can support, which actually depends on the quality of the thread library on a given platform(machine), the amount of RAM available, how much RAM is used for each connection, the workload from each connection, and the desired response time. Linux or Solaris should be able to support at 500 to 1000 simultaneous connections routinely and as many as 10,000 connections if we have many gigabytes of RAM available and the workload from each is low or the response time target undemanding. You can check more detailed information via Mysql documentation.
+
+Clustering architecture
+
+So, Clustering architecture is definitely an ideal way to process high concurrency requests. A typical configuration should be multiple machines with load balancing and automatic replication among multiple database instances. Typically, one which has Apache (load balancer/master nodes), and N (n>2) machines behind it, each having N instances of Tomcat on it. A multiple CPU machine would be good. Usually the number of threads you can handle is significantly dependent on the speed and number of CPUs you have. Usually, using multiple tomcat instances of tomcat is ideal with each one configuring maxThreads (~500). 
+
+State-of-the-art solution come with all the tools allow us clustering web server as well as database. For example, MongoDB can also be deployed with a sharded clustering.  Amazon cloud (EC2) also provide solutions for DB partiioning/sharding for various database (e.g., for mysql).
+
+We already have good literature review about various big data infrastructures (e.g., Hadoop, Apache storm is preferred for sensor data stream ) in our SETA project proposal and other EU big data proposals. Softmind has also developed a really good solution for WeSenseIt.
+
+Th reason why we didn't go for the cluster solution:
+
+Deep and i have also had a review of other scalable database solutions last month. The conclusion for us is that we have to spend few months to learn and develop. Moreover, the clustered environment needs us to "look after" constantly. Maintenance of clustering environment is costful. Amazon cloud has few excellent tool to monitor cluster environment. However, i think that is not realistic for us. If it's just for few weeks or months experiment, that is too expensive (not only for the price but also lots of scripts to develop and maintain)
+
+Stress test:
+So, single server seems a only choice for us with limited time and resource. I did a stress test for sending hundreds of thousands of sensor data with tens to 1000 parallel request. The server did pretty well and didn't break down. High volumes of data can be dumped in short time without any problem. 
+
+Limitation of this test: iceberg VM has restriction for Restrict the maximum number of independent IP connection on specific port at the same time (possbibly for DoS protection that blocks clients that attempt to establish too many connections). Moremore, maximum memory of our current VM is 8GB with few other application running at the same time. Usually less than 1Gb free memory is left.Therefore, the stress test is limited.
